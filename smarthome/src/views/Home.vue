@@ -1,17 +1,36 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+    <v-item-group multiple>
+      <v-container>
+        <v-row>
+          <v-col v-for="n in 6" :key="n" cols="12" md="4">
+            <v-item v-slot:default="{ active, toggle }">
+              <v-card
+                :color="active ? 'white' : 'black'"
+                class="d-flex align-center"
+                height="200"
+                @click="toggle"
+              >
+                <v-scroll-y-transition>
+                  <div v-if="active" class="display-3 flex-grow-1 text-center">
+                    On
+                  </div>
+                  <div v-else class="display-3 flex-grow-1 text-center white--text">Off</div>
+                </v-scroll-y-transition>
+              </v-card>
+            </v-item>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-item-group>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { Component, Vue } from "vue-property-decorator";
+
 
 @Component({
   components: {
-    HelloWorld,
+    
   },
 })
 export default class Home extends Vue {}

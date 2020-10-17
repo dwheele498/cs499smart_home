@@ -1,11 +1,14 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from flask import Flask, json, request
+from flask_restful import Api
 from os import getenv
+from test import TestRequest, PostTest
 
 from routes.demo import demo_blueprint
 
-load_dotenv()
+# load_dotenv()
 app = Flask(__name__)
+api = Api(app)
 
 @app.route('/', methods=['GET']) # GET is default, but specify anyway to be clear
 def status():
@@ -18,10 +21,13 @@ def status():
 # Here is an example
 
 app.register_blueprint(demo_blueprint, url_prefix='/demo')
+api.add_resource(TestRequest,"/test")
+api.add_resource(PostTest,"/posttest")
 
 if __name__ == '__main__':
     app.run(
-        host=getenv('FLASK_HOST'), 
-        port=getenv('FLASK_PORT'),
-        debug=getenv('FLASK_DEBUG')
+        # host=getenv('FLASK_HOST'), 
+        # port=getenv('FLASK_PORT'),
+        # debug=getenv('FLASK_DEBUG')
+        port=5000,debug=True
     )

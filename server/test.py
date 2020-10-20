@@ -2,6 +2,7 @@ from flask_restful import Resource
 from marshmallow import Schema,fields
 from flask import request
 
+
 class PostSchema(Schema):
     oToTwenty = fields.Int()
     aMessage = fields.Str()

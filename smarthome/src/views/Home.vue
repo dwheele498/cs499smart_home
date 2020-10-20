@@ -25,13 +25,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-
-
-@Component({
-  components: {
-    
-  },
+import Vue from 'vue'
+export default Vue.extend({
+  
 })
-export default class Home extends Vue {}
 </script>

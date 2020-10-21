@@ -3,6 +3,7 @@
       <v-container>
         <v-row>
           <v-col v-for="n in 6" :key="n" cols="12" md="4">
+            <v-banner class="text-center">{{rooms[n-1]}}</v-banner>
             <v-item v-slot:default="{ active, toggle }">
               <v-card
                 :color="active ? 'white' : 'black'"
@@ -10,6 +11,7 @@
                 height="200"
                 @click="toggle"
               >
+              
                 <v-scroll-y-transition>
                   <div v-if="active" class="display-3 flex-grow-1 text-center">
                     On
@@ -25,8 +27,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
+import {ROOMS} from '../consts';
 export default Vue.extend({
-  
+  data:()=>({
+    rooms: ROOMS,
+  })
 })
 </script>

@@ -2,7 +2,7 @@
 from flask import Flask, json, request
 from flask_restful import Api
 from os import getenv
-from test import TestRequest, PostTest
+from test import TestRequest, PostTest, WeatherData
 
 from routes.demo import demo_blueprint
 
@@ -23,6 +23,7 @@ def status():
 app.register_blueprint(demo_blueprint, url_prefix='/demo')
 api.add_resource(TestRequest,"/test")
 api.add_resource(PostTest,"/posttest")
+api.add_resource(WeatherData,"/weatherdata")
 
 if __name__ == '__main__':
     app.run(

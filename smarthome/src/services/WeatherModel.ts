@@ -1,4 +1,7 @@
 export interface WeatherModel{
-date: string
-tavg: number
+tavg: number,
+month: string,
+day: string,
+tmin: number,
+tmax: number
 }

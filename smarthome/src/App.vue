@@ -1,24 +1,59 @@
 <template>
-  <v-app>
-    <div
-      class="navbar horizontal end "
-      role="navigation"
-      :class="{ 'is-dark': $vuetify.theme.dark }"
+  <v-app dark>
+    <v-btn
+      @click="openMenu = !openMenu"
+      retain-focus-on-click="true"
+      :disabled="openMenu"
+      v-if="!openMenu"
+      >Menu</v-btn
     >
-        <router-link class="navbar-item center" to="/">Home</router-link>
-        <router-link class="navbar-item" to="/about">Data</router-link>
-
-      <div class="navbar-end">
-        <p class="navbar-item">Dark Mode</p>
-        <v-switch
-          class="navbar-item "
-          :value="true"
-          ref="switch"
-          v-model="$vuetify.theme.dark"
-        ></v-switch>
-      </div>
-    </div>
-
+    <v-btn v-else class="mb-auto">
+      <router-link class="navbar-item" exact-active-class="is-active" to="/"
+        >Home</router-link
+      >
+      <router-link class="navbar-item" active-class="is-active" to="/about"
+        >Data</router-link
+      >
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on">
+            Options
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>
+                <a @click="openMenu = !openMenu">Close Menu</a>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-if="!$vuetify.theme.dark">
+            <v-list-item-content>
+              <v-list-item-title>
+                <a @click="$vuetify.theme.dark = !$vuetify.theme.dark">Dark Mode</a>
+                >
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item v-else>
+            <v-list-item-content>
+              <v-list-item-title>
+                <a @click="$vuetify.theme.dark = !$vuetify.theme.dark">Light Mode</a>
+                >
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      ></v-btn
+    >
     <router-view />
   </v-app>
 </template>
@@ -32,7 +67,7 @@ export default Vue.extend({
   components: {},
 
   data: () => ({
-    //
+    openMenu: false,
   }),
   created() {
     this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
@@ -40,5 +75,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style>
+.v-baner {
+  border-style: none;
+}
 </style>

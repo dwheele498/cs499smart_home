@@ -21,7 +21,8 @@
     <v-banner class="text-center"
       ><h2>{{ month }}</h2></v-banner
     >
-    <graph v-if="apiCalled" :chartData="graphData"></graph>
+    <div><graph v-if="apiCalled" :chartData="graphData"></graph></div>
+    
     <v-overlay :value="isLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -50,7 +51,7 @@ export default Vue.extend({
     highs: [] as number[],
     lows: [] as number[],
     dateMin: DateTime.local()
-      .set({ day: 1 })
+      .set({ day: 1, month: DateTime.local().month - 1 })
       .toFormat("yyyy-MM-dd"),
     dateMax: DateTime.local()
       .set({ day: DateTime.local().day - 1 })
@@ -78,14 +79,14 @@ export default Vue.extend({
     dates() {
       if (this.dates.length == 2) {
         this.displayDate = this.dates[1];
-        this.month = (this.dates[0].split('-')[1]);
+        this.month = MONTHS[Number.parseInt(this.dates[0].split('-')[1])];
         this.initialize();
       }
     },
   },
   created() {
     this.$store.commit("resetIndex");
-    this.month = MONTHS[Number.parseInt(this.dates[0])];
+    this.month = MONTHS[Number.parseInt(this.dateMax.split('-')[1])];
   },
   methods: {
     async initialize() {

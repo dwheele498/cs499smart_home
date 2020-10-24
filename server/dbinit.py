@@ -105,7 +105,6 @@ def GenerateWeatherDbData(start, end):
                 except TypeError as err:
                     print(err)
         for el in hold:
-            tester = (int(el["day"]), int(el["month"]), int(el["tavg"]), int(el["tmin"]), int(el["tmax"]))
             if len(weatherSet) > 0:
                 if tester in weatherSet:
                     print("Duplicate rows")

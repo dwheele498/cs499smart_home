@@ -13,7 +13,7 @@
               >
               
                 <v-scroll-y-transition>
-                  <div v-if="active" class="display-3 flex-grow-1 text-center">
+                  <div v-if="active" class="display-3 flex-grow-1 text-center black--text">
                     On
                   </div>
                   <div v-else class="display-3 flex-grow-1 text-center white--text">Off</div>

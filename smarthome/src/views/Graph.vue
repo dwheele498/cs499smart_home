@@ -21,7 +21,7 @@ export default Vue.extend({
           fontColor:'darkgrey'
         }
       },
-      responsive: false,
+      responsive: true,
       maintainAspectRatio: true,
       scales: {
         yAxes: [
@@ -44,6 +44,7 @@ export default Vue.extend({
     data: {},
   }),
   mounted() {
+    Chart!.defaults!.global!.responsive=true;
     this.createChart(this.chartData);
   },
   watch: {
@@ -61,6 +62,7 @@ export default Vue.extend({
       grd.addColorStop(0.5, "yellow");
       grd.addColorStop(0.75, "blue");
       this.chartData.datasets[0].backgroundColor = grd;
+      this.chartData.datasets.push()
       const options = {
         type: "line",
         data: chartData,

@@ -6,7 +6,7 @@
       :class="{ 'is-dark': $vuetify.theme.dark }"
     >
         <router-link class="navbar-item center" to="/">Home</router-link>
-        <router-link class="navbar-item" to="/about">About</router-link>
+        <router-link class="navbar-item" to="/about">Data</router-link>
 
       <div class="navbar-end">
         <p class="navbar-item">Dark Mode</p>

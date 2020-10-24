@@ -34,8 +34,8 @@ def GenerateWeatherDbData(start, end):
 
     cursor = connection.cursor()
     cursor.execute(
-        "Select day,month,tavg,tlow,thigh from weather where month = %s and day between %s and %s",
-        (int(startSplit[1]), int(startSplit[2]), int(endSplit[2])),
+        "Select day,month,tavg,tlow,thigh from weather ",
+        # (int(startSplit[1]), int(startSplit[2]), int(endSplit[2])),
     )
     weatherTable = cursor.fetchall()
     weatherSet = set(weatherTable)
@@ -92,13 +92,11 @@ def GenerateWeatherDbData(start, end):
                     },
                     unknown=INCLUDE,
                 )
-                print(z)
                 hold.append(z)
             except ValidationError as err:
                 print(err.messages)
 
         for t in hold:
-            print(t)
             if t["tavg"] is not None:
                 try:
                     t["tavg"] = math.floor(t["tavg"] * 1.8 + 32)
@@ -106,13 +104,10 @@ def GenerateWeatherDbData(start, end):
                     t["tmax"] = math.floor(t["tmax"] * 1.8 + 32)
                 except TypeError as err:
                     print(err)
-        print("zzzzzzz")
         for el in hold:
+            tester = (int(el["day"]), int(el["month"]), int(el["tavg"]), int(el["tmin"]), int(el["tmax"]))
             if len(weatherSet) > 0:
-                if len(weatherSet.intersection(
-                        {int(el["tavg"]), int(el["day"]), int(el["month"]), int(el["tmin"]), int(el["tmax"])}
-                        )
-                )>1:
+                if tester in weatherSet:
                     print("Duplicate rows")
                 else:
                     cursor.execute(
@@ -136,13 +131,9 @@ def GenerateWeatherDbData(start, end):
                         int(el["tmax"]),
                     ),
                 )
-        cursor.execute("SELECT tavg,day,month,tlow,thigh from weather")
-        q = cursor.fetchall()
-        print(q)
-
         connection.commit()
         cursor.close()
 
 
 #ReCreateWeatherTable()
-# GenerateWeatherDbData("2020-10-01", "2020-10-03")
+GenerateWeatherDbData("2020-10-01", "2020-10-09")

@@ -2,6 +2,7 @@
   <v-container class="ma-auto py-0">
     <v-row align="center">
       <v-date-picker
+        class="pa-auto"
         color="primary"
         v-model="dates"
         range
@@ -10,7 +11,8 @@
       ></v-date-picker>
       ><temp
         v-if="index > 0"
-        :date="displayDate"
+        :date="labels[index]"
+        :month="month"
         :temp="value[index]"
         :high="highs[index]"
         :low="lows[index]"
@@ -53,13 +55,14 @@ export default Vue.extend({
     dateMax: DateTime.local()
       .set({ day: DateTime.local().day - 1 })
       .toFormat("yyyy-MM-dd"),
-    dates: [],
+    dates: [] as string[],
     displayDate: "",
     month: "",
     graphData: {
       labels: [] as string[],
       datasets: [
         {
+          borderColor: "red",
           label: "Avg Daily Temp",
           data: [] as number[],
           backgroundColor: ["#32a852"],
@@ -75,6 +78,7 @@ export default Vue.extend({
     dates() {
       if (this.dates.length == 2) {
         this.displayDate = this.dates[1];
+        this.month = (this.dates[0].split('-')[1]);
         this.initialize();
       }
     },
@@ -90,8 +94,6 @@ export default Vue.extend({
       this.isLoading = true;
       this.labels = [] as string[];
       this.value = [] as number[];
-      this.highs = [] as number[];
-      this.lows = [] as number[];
       const start = this.dates[0];
       const end = this.dates[1];
       await weatherApi

@@ -74,5 +74,3 @@ def GenerateWaterDbData():
         cursor.close()
         connection.close()
     print("update complete")
-print("Test\n")
-GenerateWaterDbData()

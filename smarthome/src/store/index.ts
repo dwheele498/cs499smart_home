@@ -1,15 +1,23 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex, { MutationTree } from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({
+export interface RootState {
+  index: number;
+}
+
+const mutations: MutationTree<RootState> = {
+  resetIndex(state) {
+    state.index = 0;
+  },
+};
+
+const store = new Vuex.Store<RootState>({
   state: {
+    index: 0,
   },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+  mutations: mutations,
+});
+
+export default store;

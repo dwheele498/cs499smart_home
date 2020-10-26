@@ -12,6 +12,6 @@
 - If you install a new package, create a new requirements file with `(venv) $ pip freeze > requirements.txt`
 
 ## Project Structure
-- A backend web application in api/
-- A frontend web application in ui/
+- A backend web application in server/
+- A frontend web application in smarthome/
 - Maybe a generator in generator/

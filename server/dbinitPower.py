@@ -29,24 +29,24 @@ def randwash():
 
 class PowerSchema(Schema):
     powerdate = fields.Date()
-    livingtv = fields.Int()
-    bedtv = fields.Int()
-    oven = fields.Int()
-    microwave = fields.Int()
-    stove = fields.Int()
-    dishwasher = fields.Int()
-    clotheswasher = fields.Int()
-    dryer = fields.Int()
-    hvac = fields.Int()
-    bathexhaust = fields.Int()
+    livingtv = fields.Float()
+    bedtv = fields.Float()
+    oven = fields.Float()
+    microwave = fields.Float()
+    stove = fields.Float()
+    dishwasher = fields.Float()
+    clotheswasher = fields.Float()
+    dryer = fields.Float()
+    hvac = fields.Float()
+    bathexhaust = fields.Float()
 
 
 def ClearPower():
     with connection.cursor() as cursor:
         cursor.execute('Drop Table power')
         connection.commit()
-        cursor.execute('create table power(id serial PRIMARY KEY, powerdate date, livingtv int, bedtv int, '
-                       'oven int, microwave int, stove int, dishwasher int, clotheswasher int, dryer int, lights int, hvac int, exhaust int)')
+        cursor.execute('create table power(id serial PRIMARY KEY, powerdate date, livingtv float, bedtv float, '
+                       'oven float, microwave float, stove float, dishwasher float, clotheswasher float, dryer float, lights float, hvac float, exhaust float)')
         connection.commit()
 
 def GeneratePowerDBData():
@@ -85,7 +85,7 @@ def GeneratePowerDBData():
         date = date.strftime("%Y-%m-%d")
         update_usage = powerschema.load({"powerdate":date, "livingtv":liveTv,
                                      "bedtv":bedTv,"oven":oven,"microwave":microwave,"clotheswasher":washer,"dryer":dryer, "hvac":hvac},unknown=INCLUDE)
-        print(update_usage)
+        print(update_usage.get('powerdate'))
         # cursor.execute(insert_db, update_usage)
         # connection.commit()
         print("updated table")

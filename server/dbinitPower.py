@@ -83,7 +83,7 @@ def GeneratePowerDBData():
             total = liveTv + bedTv + oven + microwave
             print(day, 'total weekend', total)
         date = date.strftime("%Y-%m-%d")
-        update_usage = powerschema.load({"date":date, "livingtv":liveTv,
+        update_usage = powerschema.load({"powerdate":date, "livingtv":liveTv,
                                      "bedtv":bedTv,"oven":oven,"microwave":microwave,"clotheswasher":washer,"dryer":dryer, "hvac":hvac},unknown=INCLUDE)
         print(update_usage)
         # cursor.execute(insert_db, update_usage)

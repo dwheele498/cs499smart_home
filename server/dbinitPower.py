@@ -1,8 +1,8 @@
 import psycopg2
 import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
-from .dbinit import CreateConnection
+from dbinit import CreateConnection
 from marshmallow import Schema, fields
 
 connection = CreateConnection()
@@ -49,44 +49,44 @@ def ClearPower():
                        'oven int, microwave int, stove int, dishwasher int, clotheswasher int, dryer int, lights int, hvac int, exhaust int)')
         connection.commit()
 
-def GeneratePowerDBDate():
+def GeneratePowerDBData():
     powerschema = PowerSchema()
-    with connection.cursor() as cursor:
-        insert_db = 'INSERT INTO power(powerdate,livingtv,bedtv,oven,microwave,stove,' \
-                    'dishwasher,clotheswasher,dryer,light,hvac,exhaust) ' \
-                    'VALUES (%s, %s, $s, %s, %s, %s, %s,%s,%s,%s,%s)'
+    # with connection.cursor() as cursor:
+        # insert_db = 'INSERT INTO power(powerdate,livingtv,bedtv,oven,microwave,stove,' \
+        #             'dishwasher,clotheswasher,dryer,light,hvac,exhaust) ' \
+        #             'VALUES (%s, %s, $s, %s, %s, %s, %s,%s,%s,%s,%s)'
         # update_db = 'UPDATE power set id = %s, day = %s, month = %s, year = %s, livingroomTv = %s, bedroomTv = %s, Oven = %s, Microwave = %s WHERE id = %s'
-        for i in range(90):
-            date = datetime.now().replace(day=i)
-            day = calendar.day_name[date.weekday()]
-            if day == 'Monday' or 'tuesday' or 'Wednesday' or 'Thursday' or 'Friday':
-                # Formula for cost: ((Watts x hours used)/1000 kwh) x 0.12
-                liveTv = (((636 * 4) / 1000) * 0.12) * rand()
-                print(day, 'livetv',liveTv)
-                bedTv = (((100 * 2) / 1000) * 0.12) * rand()
-                print(day,'bedtv' , bedTv)
-                microwave = (((1100 * 0.33) / 1000) * 0.1) * rand()
-                print(day, 'microwave', microwave)
-                oven = (((4000 * 0.75) / 1000) * 0.12) * rand()
-                print(day, 'oven', oven)
-                total = liveTv + bedTv + oven + microwave
-                print(day,'total' ,total)
-            elif day == 'Saturday' or 'Sunday':
-                liveTv = (((636 * 8) / 1000) * 0.12) * rand()
-                print(day, 'livetv weekend', liveTv)
-                bedTv = (((100 * 4) / 1000) * 0.12) * rand()
-                print(day, 'bedtv weekend', bedTv)
-                microwave = (((1100 * 0.5) / 1000) * 0.12) * rand()
-                print(day, 'microwave weekend', microwave)
-                oven = (((4000 * 1) / 1000) * 0.12) * rand()
-                print(day, 'oven weekend', oven)
-                total = liveTv + bedTv + oven + microwave
-                print(day, 'total weekend', total)
-            update_usage = powerschema.load({"date":date, "livingtv":liveTv,"bedtv":bedTv,"oven":oven,"microwave":microwave,"clotheswasher":washer,"dryer":dryer, "hvac":hvac})
-            # cursor = connection.cursor()
-            cursor.execute(insert_db, update_usage)
-            connection.commit()
-            print("updated table")
+    for i in range(90):
+        date = datetime.now().replace(day=i)
+        day = calendar.day_name[date.weekday()]
+        if day == 'Monday' or 'tuesday' or 'Wednesday' or 'Thursday' or 'Friday':
+            # Formula for cost: ((Watts x hours used)/1000 kwh) x 0.12
+            liveTv = (((636 * 4) / 1000) * 0.12) * rand()
+            print(day, 'livetv',liveTv)
+            bedTv = (((100 * 2) / 1000) * 0.12) * rand()
+            print(day,'bedtv' , bedTv)
+            microwave = (((1100 * 0.33) / 1000) * 0.1) * rand()
+            print(day, 'microwave', microwave)
+            oven = (((4000 * 0.75) / 1000) * 0.12) * rand()
+            print(day, 'oven', oven)
+            total = liveTv + bedTv + oven + microwave
+            print(day,'total' ,total)
+        elif day == 'Saturday' or 'Sunday':
+            liveTv = (((636 * 8) / 1000) * 0.12) * rand()
+            print(day, 'livetv weekend', liveTv)
+            bedTv = (((100 * 4) / 1000) * 0.12) * rand()
+            print(day, 'bedtv weekend', bedTv)
+            microwave = (((1100 * 0.5) / 1000) * 0.12) * rand()
+            print(day, 'microwave weekend', microwave)
+            oven = (((4000 * 1) / 1000) * 0.12) * rand()
+            print(day, 'oven weekend', oven)
+            total = liveTv + bedTv + oven + microwave
+            print(day, 'total weekend', total)
+        update_usage = powerschema.load({"date":date, "livingtv":liveTv,"bedtv":bedTv,"oven":oven,"microwave":microwave,"clotheswasher":washer,"dryer":dryer, "hvac":hvac})
+        print(**update_usage)
+        # cursor.execute(insert_db, update_usage)
+        # connection.commit()
+        print("updated table")
 
-#GeneratePowerDBDate()
+GeneratePowerDBData()
 #ClearPower()

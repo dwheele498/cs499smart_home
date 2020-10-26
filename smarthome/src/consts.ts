@@ -40,29 +40,28 @@ export async function WeatherCall(
   lows: number[]
 ): Promise<models.WeatherFuncModel> {
   store.commit("resetIndex");
-  const start = dates[0];
-  const end = dates[1];
+  const start = new Date(dates[0]).toISOString();
+  const end = new Date(dates[1]).toISOString();
   const weather = {} as models.WeatherFuncModel;
   await weatherApi
     .getMonth(start, end)
     .then((res: any) => {
       res.data.data.forEach((temp: WeatherModel) => {
+        console.log(temp);
+        console.log(temp.selectedDate);
         if (temp.tavg == null) {
           console.log("");
         } else {
           const inLabel = label.find((d) => {
-            d == `${temp.month}-${temp.day}`;
+            d == `${temp.selectedDate}`;
           });
           if (!inLabel) {
-            const dt = DateTime.local().set({
-              month: Number.parseInt(temp.month),
-              day: Number.parseInt(temp.day),
-            });
+            const dt = DateTime.fromISO(temp.selectedDate);
             value.push(temp.tavg);
             label.push(dt.toFormat("M/d"));
             lows.push(temp.tmin);
             highs.push(temp.tmax);
-            const i = label.indexOf(`${temp.month}-${temp.day}`);
+            const i = label.indexOf(`${temp.selectedDate}`);
             value[i] += Math.floor(temp.tavg / 2);
           }
         }

@@ -1,16 +1,16 @@
 from flask_restful import Resource
-from marshmallow import Schema, fields, EXCLUDE
+from marshmallow import Schema, fields, INCLUDE
 from flask import request
 import psycopg2
 from datetime import datetime
-from dbGen.weatherDbGen import GenerateWeatherDbData, CreateConnection
+import json
+from dbGen.weatherDbGen import GenerateWeatherDbData, CreateConnection, WeatherData
 
 
 
 
 class GetWeatherSchema(Schema):
-    day = fields.Str()
-    month = fields.Str()
+    selectedDate=fields.String()
     tavg = fields.Int(allow_none=True)
     tmin = fields.Int(required=False)
     tmax = fields.Int(required=False)
@@ -28,20 +28,22 @@ class WeatherDataMonthly(Resource):
     @classmethod
     def get(cls):
         print(request.args)
-        dates = weatherRequestSchema.load(request.args)
+        dates = weatherRequestSchema.load(request.args,unknown=INCLUDE)
+
         if dates is None:
-            return {'message':'empty data'},400
-        startSplit = dates.get('start').split('-')
-        endSplit = dates.get('end').split('-')
-        GenerateWeatherDbData(dates.get('start'),dates.get('end'))
+            return {'message': 'empty data'}, 400
+        start = datetime.today().fromisoformat(dates.get('start')[:-1])
+        end = datetime.today().fromisoformat(dates.get('end')[:-1])
+        WeatherData(start,end),
         connection = CreateConnection()
         data = []
         response = []
         with connection.cursor() as cursor:
-            cursor.execute('SELECT tavg,day,month,tlow,thigh FROM Weather where month=%s and day between %s and %s',(int(startSplit[1]),int(startSplit[2]),int(endSplit[2])))
+            cursor.execute(
+                'SELECT tavg,selectedDate,tlow,thigh FROM Weather where selectedDate >=%s and selectedDate <= %s',
+                (dates.get('start'), dates.get('end')))
             data = cursor.fetchall()
         for d in data:
-            print(d)
-            response.append(weather_schema.load({'tavg':d[0],'day':str(d[1]),'month':str(d[2]),'tmin':d[3],'tmax':d[4]}))
+            response.append(weather_schema.load({'tavg':d[0],'selectedDate':str(d[1]),'tmin':d[2],'tmax':d[3]}))
         connection.close()
-        return({'data': response}),200
+        return({'data': response}), 200

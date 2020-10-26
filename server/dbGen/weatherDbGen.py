@@ -35,7 +35,6 @@ def GenerateWeatherDbData(start, end):
     cursor = connection.cursor()
     cursor.execute(
         "Select day,month,tavg,tlow,thigh from weather ",
-        # (int(startSplit[1]), int(startSplit[2]), int(endSplit[2])),
     )
     weatherTable = cursor.fetchall()
     weatherSet = set(weatherTable)
@@ -136,4 +135,4 @@ def GenerateWeatherDbData(start, end):
 
 
 #ReCreateWeatherTable()
-GenerateWeatherDbData("2020-10-01", "2020-10-04")
+#GenerateWeatherDbData("2020-10-01", "2020-10-04")

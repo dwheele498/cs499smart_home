@@ -3,12 +3,9 @@ from marshmallow import Schema, fields, EXCLUDE
 from flask import request
 import psycopg2
 from datetime import datetime
-from dbinit import GenerateWeatherDbData, CreateConnection
+from dbGen.weatherDbGen import GenerateWeatherDbData, CreateConnection
 
 
-class PostSchema(Schema):
-    oToTwenty = fields.Int()
-    aMessage = fields.Str()
 
 
 class GetWeatherSchema(Schema):
@@ -18,35 +15,19 @@ class GetWeatherSchema(Schema):
     tmin = fields.Int(required=False)
     tmax = fields.Int(required=False)
 
-class DatesSchema(Schema):
-    day: fields.String()
-    month: fields.String()
 
 class WeatherRequestSchema(Schema):
     start = fields.String()
     end = fields.String()
 
-
-post_schema = PostSchema()
 weather_schema = GetWeatherSchema()
 weatherRequestSchema = WeatherRequestSchema()
-
-class TestRequest(Resource):
-    @classmethod
-    def get(cls):
-        return {"message": "Test response"}, 200
-
-
-class PostTest(Resource):
-    @classmethod
-    def post(cls):
-        data = post_schema.load(request.get_json())
-        return {"message": data}, 200
 
 
 class WeatherDataMonthly(Resource):
     @classmethod
     def get(cls):
+        print(request.args)
         dates = weatherRequestSchema.load(request.args)
         if dates is None:
             return {'message':'empty data'},400

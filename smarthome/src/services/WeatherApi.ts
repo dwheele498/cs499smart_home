@@ -1,6 +1,6 @@
 import { Api,WeatherAPI } from "./api";
 import { WEATHER_STATS } from "../consts";
-import { WeatherModel } from "./WeatherModel";
+import { WeatherModel } from "./models/WeatherModel";
 
 class WeatherApi {
   getDay = (start: string, end: string) =>

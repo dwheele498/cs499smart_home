@@ -4,18 +4,18 @@ import Vuex, { MutationTree } from "vuex";
 Vue.use(Vuex);
 
 export interface RootState {
-  index: number;
+  index?: number;
 }
 
 const mutations: MutationTree<RootState> = {
   resetIndex(state) {
-    state.index = 0;
+    state.index = undefined;
   },
 };
 
 const store = new Vuex.Store<RootState>({
   state: {
-    index: 0,
+    index: undefined,
   },
   mutations: mutations,
 });

@@ -1,5 +1,5 @@
 <template>
-  <v-tabs @change="$emit('tab-set',($event))" grow>
+  <v-tabs @change="$emit('tab-set', $event)" grow>
     <v-tab>Weather</v-tab>
     <v-tab>Water</v-tab>
     <v-tab>Power</v-tab>
@@ -14,12 +14,12 @@ export default Vue.extend({
     water: "water",
     power: "power",
   }),
-  created(){
-      this.$emit('selectedTab',0);
+  created() {
+    this.$emit("selectedTab", 0);
   },
   methods: {
     tabChange(selected: Event) {
-      this.$emit('setTab',selected)
+      this.$emit("setTab", selected);
     },
   },
 });

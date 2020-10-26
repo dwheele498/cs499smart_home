@@ -3,7 +3,7 @@ import calendar
 from datetime import datetime, timedelta
 import random
 from dbinit import CreateConnection
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, INCLUDE
 
 connection = CreateConnection()
 
@@ -57,7 +57,7 @@ def GeneratePowerDBData():
         #             'VALUES (%s, %s, $s, %s, %s, %s, %s,%s,%s,%s,%s)'
         # update_db = 'UPDATE power set id = %s, day = %s, month = %s, year = %s, livingroomTv = %s, bedroomTv = %s, Oven = %s, Microwave = %s WHERE id = %s'
     for i in range(90):
-        date = datetime.now().replace(day=i)
+        date = datetime.today() - timedelta(days=i)
         day = calendar.day_name[date.weekday()]
         if day == 'Monday' or 'tuesday' or 'Wednesday' or 'Thursday' or 'Friday':
             # Formula for cost: ((Watts x hours used)/1000 kwh) x 0.12
@@ -82,8 +82,10 @@ def GeneratePowerDBData():
             print(day, 'oven weekend', oven)
             total = liveTv + bedTv + oven + microwave
             print(day, 'total weekend', total)
-        update_usage = powerschema.load({"date":date, "livingtv":liveTv,"bedtv":bedTv,"oven":oven,"microwave":microwave,"clotheswasher":washer,"dryer":dryer, "hvac":hvac})
-        print(**update_usage)
+        date = date.strftime("%Y-%m-%d")
+        update_usage = powerschema.load({"date":date, "livingtv":liveTv,
+                                     "bedtv":bedTv,"oven":oven,"microwave":microwave,"clotheswasher":washer,"dryer":dryer, "hvac":hvac},unknown=INCLUDE)
+        print(update_usage)
         # cursor.execute(insert_db, update_usage)
         # connection.commit()
         print("updated table")

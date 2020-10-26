@@ -1,64 +1,40 @@
 <template>
-  <v-container class="ma-auto py-0">
-    <v-row align="center">
-      <v-date-picker
-        class="pa-auto"
-        color="primary"
-        v-model="dates"
-        range
-        :min="dateMin"
-        :max="dateMax"
-      ></v-date-picker>
-      ><temp
+  <v-main class="ma-auto py-0">
+    <div>
+      <temp
         v-if="index > 0"
         :date="labels[index]"
-        :month="month"
         :temp="value[index]"
         :high="highs[index]"
         :low="lows[index]"
       ></temp>
-    </v-row>
-    <v-banner class="text-center"
-      ><h2>{{ month }}</h2></v-banner
-    >
-    <div><graph v-if="apiCalled" :chartData="graphData"></graph></div>
-    
+    </div>
+
+    <div v-if="callComplete"><graph :chartData="graphData"></graph></div>
     <v-overlay :value="isLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
-  </v-container>
+  </v-main>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { DateTime } from "luxon";
+import { mapState } from "vuex";
 import { weatherApi } from "../services/WeatherApi";
 import { WeatherModel } from "../services/WeatherModel";
-import { MONTHS } from "../consts";
-import GraphVue from "./Graph.vue";
-import TempView from "./TempView.vue";
-import { mapState } from "vuex";
-import { AxiosResponse } from "axios";
+import Graph from "../views/Graph.vue";
+import { DateTime } from "luxon";
+import TempViewVue from './TempView.vue';
 export default Vue.extend({
-  components: {
-    graph: GraphVue,
-    temp: TempView,
-  },
+  props: ["dates"],
   data: () => ({
-    apiCalled: false,
     value: [] as number[],
     labels: [] as string[],
     highs: [] as number[],
     lows: [] as number[],
-    dateMin: DateTime.local()
-      .set({ day: 1, month: DateTime.local().month - 1 })
-      .toFormat("yyyy-MM-dd"),
-    dateMax: DateTime.local()
-      .set({ day: DateTime.local().day - 1 })
-      .toFormat("yyyy-MM-dd"),
-    dates: [] as string[],
-    displayDate: "",
+    isLoading: false,
     month: "",
+    callComplete: false,
     graphData: {
       labels: [] as string[],
       datasets: [
@@ -70,31 +46,23 @@ export default Vue.extend({
         },
       ],
     },
-    isLoading: false,
   }),
+
+  components: {
+    graph: Graph,
+    temp: TempViewVue
+  },
   computed: {
     ...mapState(["index"]),
   },
-  watch: {
-    dates() {
-      if (this.dates.length == 2) {
-        this.displayDate = this.dates[1];
-        this.month = MONTHS[Number.parseInt(this.dates[0].split('-')[1])];
-        this.initialize();
-      }
-    },
-  },
   created() {
-    this.$store.commit("resetIndex");
-    this.month = MONTHS[Number.parseInt(this.dateMax.split('-')[1])];
+    this.callComplete = false;
+    this.initialize();
   },
   methods: {
     async initialize() {
-      this.$store.commit("resetIndex");
-      this.apiCalled = false;
       this.isLoading = true;
-      this.labels = [] as string[];
-      this.value = [] as number[];
+      this.$store.commit("resetIndex");
       const start = this.dates[0];
       const end = this.dates[1];
       await weatherApi
@@ -115,7 +83,7 @@ export default Vue.extend({
                 });
                 console.log(temp);
                 this.value.push(temp.tavg);
-                this.labels.push(dt.toFormat("d"));
+                this.labels.push(dt.toFormat("M/d"));
                 this.lows.push(temp.tmin);
                 this.highs.push(temp.tmax);
                 const i = this.labels.indexOf(`${temp.month}-${temp.day}`);
@@ -126,11 +94,10 @@ export default Vue.extend({
         })
         .catch((err: Error) => console.log(err.message))
         .finally(() => {
-          this.isLoading = false;
           this.graphData.datasets[0].data = this.value;
           this.graphData.labels = this.labels;
-          this.apiCalled = true;
-          this.dates = [];
+          this.callComplete = true;
+          this.isLoading = false;
         });
     },
   },

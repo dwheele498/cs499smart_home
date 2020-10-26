@@ -53,7 +53,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    createChart(chartData: any) {
+    createChart(chartData: ChartDataModel) {
       const cv = document.getElementById("graph") as HTMLCanvasElement;
       const ctx = cv.getContext("2d");
       const grd = ctx!.createLinearGradient(0, 0, 0, cv.height / 0.75);

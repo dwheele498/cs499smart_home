@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto my-10"  width="200" height="8rem">
-        <h2 class="text-center">{{month}}/{{date}}</h2>
+        <h2 class="text-center">{{date}}</h2>
     <v-card-text class="text-center">
       <h2 class="mx-auto px-auto red--text text--lighten-3">High: {{high}}&#8457;</h2>
       <h2 class="mx-auto px-auto lime-text">Avg: {{ temp }}&#8457;</h2>

@@ -57,7 +57,7 @@ def GenerateWaterDbData():
             dailyBath = (bath.rate * 3)
             dailyDishWasher = (dish.rate * randomWaterTrigger())
         #send to db(index(year,month,day))
-        record_to_insert = (i, my_date.day,my_date.month,my_date.year,dailyClothesWasher,dailyShower,dailyBath,dailyDishWasher)
+        #record_to_insert = (i, my_date.day,my_date.month,my_date.year,dailyClothesWasher,dailyShower,dailyBath,dailyDishWasher)
         record_to_update = (i, my_date.day,my_date.month,my_date.year,dailyClothesWasher,dailyShower,dailyBath,dailyDishWasher, i)
         connection = psycopg2.connect(
             database="Team3DB",

@@ -1,6 +1,9 @@
 export const API_KEY = '1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh';
 export const WEATHER_STATS = {lat: 33.543682, lon: -86.779633};
 export const ROOMS = ['Living Room','Kitchen','Master Bedroom','Child Bedroom','Garage','Bathroom']
+export const  POWER_DEVICES = ['Living Room TV','Bedroom TV','HVAC','Refrigerator','Microwave','Water Heater','Stove','Over',
+'Dishwasher','Washing Machine', 'Dryer','Bath Exhaust']
+export const WATER_DEVICES = ['Bath','Shower','Dishwasher','Washing Machine',]
 export enum MONTHS {
     January = 1,
     February = 2,
@@ -15,3 +18,4 @@ export enum MONTHS {
     November,
     December
 }
+

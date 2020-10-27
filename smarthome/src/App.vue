@@ -14,6 +14,9 @@
       <router-link class="navbar-item" active-class="is-active" to="/about"
         >Data</router-link
       >
+       <router-link class="navbar-item" active-class="is-active" to="/admin"
+        >Admin</router-link
+      >
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on">

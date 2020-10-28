@@ -1,16 +1,22 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import vuetify from '@/plugins/vuetify'
-import '../node_modules/bulma/css/bulma.css';
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import vuetify from "@/plugins/vuetify";
+import "../node_modules/bulma/css/bulma.css";
+import Timer from "easytimer.js";
 
+declare module "vue/types/vue" {
+  interface Vue {
+    $timer: Timer;
+  }
+}
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

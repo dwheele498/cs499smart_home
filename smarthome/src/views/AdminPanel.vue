@@ -49,7 +49,6 @@ export default Vue.extend({
     rooms: [] as string[],
     power: [] as string[],
     water: [] as string[],
-    timer: {} as Timer,
   }),
   created() {
     this.resetPower();
@@ -57,45 +56,35 @@ export default Vue.extend({
     this.rooms = ROOMS;
     this.power = POWER_DEVICES;
     this.water = WATER_DEVICES;
-    this.timer = new Timer();
   },
   methods: {
     ...mapMutations(['addPower','addWater','resetPower','resetWater']),
-    timerStart() {
-      this.timer.reset();
-      this.timer.start();
-      console.log('Timer start');
-    },
-    timerStop() {
-      this.timer.pause();
-    },
     getTime(){
       console.log('Sending time');
-      const sp = this.timer.getTimeValues().toString().split(':');
+      const sp = this.$timer.getTimeValues().toString().split(':');
       Number.parseInt(sp[2])<30?sp[2]='30':sp[2];
       this.addPower(Number.parseInt(sp[2]));
       
     },
-    getWaterTime(){
-      this.addWater(1);
-    },
     firePowerEvent(event: any){
       console.log(event);
       if(event===true){
-        this.timerStart();
+        this.$timer.start()
       } 
       else{
-        this.timerStop();
+        this.$timer.pause();
         this.getTime();
+        this.$timer.stop();
       }
     },
     fireWaterEvent(event: any){
            if(event===true){
-        this.timerStart();
+        this.$timer.start();
       } 
       else{
-        this.timerStop();
-        this.getWaterTime();
+        this.$timer.pause()
+        this.addWater(1);
+        this.$timer.stop();
       }
     }
   },

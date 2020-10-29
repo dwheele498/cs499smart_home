@@ -1,6 +1,7 @@
+import math
+
 import psycopg2
 import requests
-import math
 from marshmallow import Schema, fields, ValidationError, INCLUDE
 
 
@@ -105,7 +106,7 @@ def GenerateWeatherDbData(start, end):
                 except TypeError as err:
                     print(err)
         for el in hold:
-            tester = {(el['day'],el['month'],el['tavg'],el['tlow'],el['thigh'])}
+            tester = {(el['day'], el['month'], el['tavg'], el['tlow'], el['thigh'])}
             if len(weatherSet) > 0:
                 if tester in weatherSet:
                     print("Duplicate rows")
@@ -134,6 +135,5 @@ def GenerateWeatherDbData(start, end):
         connection.commit()
         cursor.close()
 
-
-#ReCreateWeatherTable()
-#GenerateWeatherDbData("2020-10-01", "2020-10-09")
+# ReCreateWeatherTable()
+# GenerateWeatherDbData("2020-10-01", "2020-10-09")

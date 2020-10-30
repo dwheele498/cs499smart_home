@@ -81,6 +81,7 @@ export default Vue.extend({
       this.chart = new Chart(cv, options);
 
       cv.onclick = (evt) => {
+        console.log(evt);
         const a = this.chart.getElementAtEvent(evt);
         console.log(a);
         this.$store.state.index = a[0]._index;

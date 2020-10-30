@@ -18,6 +18,9 @@ export const ROOMS = [
   "Garage",
   "Bathroom",
 ];
+export const  POWER_DEVICES = ['Living Room TV','Bedroom TV','HVAC','Refrigerator','Microwave','Water Heater','Stove','Over',
+'Dishwasher','Washing Machine', 'Dryer','Bath Exhaust']
+export const WATER_DEVICES = ['Bath','Shower','Dishwasher','Washing Machine',]
 export enum MONTHS {
   January = 1,
   February = 2,

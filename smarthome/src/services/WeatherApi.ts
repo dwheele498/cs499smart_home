@@ -1,10 +1,11 @@
 import { Api,WeatherAPI } from "./api";
 import { WEATHER_STATS } from "../consts";
 import { WeatherModel } from "./models/WeatherModel";
+import { HourlyWeatherModel } from "./models/HourlyWeatherModel";
 
 class WeatherApi {
   getDay = (start: string, end: string) =>
-    WeatherAPI.get<WeatherModel>("/point/daily", {
+    WeatherAPI.get<HourlyWeatherModel>("/point/hourly", {
       params: {
         start,
         end,

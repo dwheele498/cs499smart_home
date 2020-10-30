@@ -1,5 +1,6 @@
 <template>
   <v-item-group multiple>
+    <thermo></thermo>
     <v-container>
       <v-row>
         <v-col v-for="n in 6" :key="n" cols="12" md="4">
@@ -36,9 +37,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { ROOMS } from "../consts";
+import ThermostatVue from './Thermostat.vue';
 export default Vue.extend({
   data: () => ({
     rooms: ROOMS,
   }),
+  components:{thermo: ThermostatVue}
 });
 </script>

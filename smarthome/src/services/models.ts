@@ -4,3 +4,5 @@ export * from './models/WaterModel';
 export * from './models/WeatherFuncModel';
 export * from './models/WeatherModel';
 export * from './models/WaterFuncModel';
+export * from './models/PowerModel';
+export * from './models/PowerFuncModel';

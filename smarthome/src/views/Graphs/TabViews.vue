@@ -19,6 +19,7 @@ export default Vue.extend({
   },
   methods: {
     tabChange(selected: Event) {
+      console.log(selected);
       this.$emit("setTab", selected);
     },
   },

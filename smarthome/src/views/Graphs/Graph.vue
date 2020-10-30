@@ -6,7 +6,7 @@
 import Vue from "vue";
 import Chart from "chart.js";
 import { ChartDataModel } from "../../services/models/ChartDataModel";
-import { GraphData } from 'services/models';
+import { GraphData } from '../../services/models/GraphDataModel';
 export default Vue.extend({
   props: {
     chartData: {
@@ -41,7 +41,7 @@ export default Vue.extend({
           }
         ]
       },
-    },
+    } as Record<any,any>,
     data: {},
   }),
   mounted() {
@@ -52,6 +52,7 @@ export default Vue.extend({
   },
   watch: {
     chartData() {
+      console.log(this.chartData);
       this.$data._chart.update();
     },
   },
@@ -65,6 +66,12 @@ export default Vue.extend({
       // grd.addColorStop(0.5, "yellow");
       // grd.addColorStop(0.75, "blue");
       // this.chartData.datasets[0].backgroundColor = grd;
+      if(this.chartData.datasets.length>5)
+      {
+        console.log('over 5');
+        this.options.scales.yAxes[0].ticks.stepSize=0.5
+        console.log(this.options);
+      }
       this.chartData.datasets.push()
       const options = {
         type: "line",

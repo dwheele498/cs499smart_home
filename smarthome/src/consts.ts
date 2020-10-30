@@ -6,6 +6,7 @@ import * as models from "./services/models";
 import { Api } from "./services/api";
 import { waterApi } from "./services/WaterApi";
 import { ChartDataModel, WaterModel } from "./services/models";
+import { powerApi } from "./services/PowerApi";
 
 export const API_KEY = "1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh";
 export const WEATHER_STATS = { lat: 33.543682, lon: -86.779633 };
@@ -174,4 +175,141 @@ export async function WaterCall(
     });
 
   return waterResult;
+}
+
+export async function PowerCall(
+  dates: string[],
+  value: number[],
+  label: string[]
+): Promise<models.PowerFuncModel> {
+  store.commit("resetIndex");
+  const start = dates[0];
+  const end = dates[1];
+   const oven =[] as number[];
+  const microwave = [] as number[]
+   const bedtv=[] as number[]
+  const livingtv = [] as number[]
+  const stove = [] as number[]
+  const dishwasher = [] as number[]
+ const hvac = [] as number[]
+  const clotheswasher = [] as number[]
+ const exhaust = [] as number[]
+  const powerResult = {} as models.PowerFuncModel;
+  await powerApi
+    .getMonth(start, end)
+    .then((res: any) => {
+      res.data.start.forEach((power: models.PowerModel) => {
+        const total =
+          power.livingtv + power.bedtv + power.clotheswasher + power.dishwasher + power.exhaust + power.hvac + power.microwave + power.oven + power.stove;
+        value.push(total);
+        dishwasher.push(power.dishwasher);
+        clotheswasher.push(power.clotheswasher);
+        exhaust.push(power.exhaust);
+        livingtv.push(power.livingtv);
+        hvac.push(power.hvac);
+        stove.push(power.stove);
+        bedtv.push(power.bedtv);
+        oven.push(power.oven);
+        microwave.push(power.microwave);
+        console.log(power.powerdate);
+        const dt = DateTime.fromISO(power.powerdate).toFormat("M/d");
+        label.push(dt);
+      });
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      const graphData0 = {
+        label: "Total Power Usage Per Day",
+        data: value,
+        backgroundColor: [],
+        borderColor: "cyan",
+      } as ChartDataModel;
+      const graphData1 = {
+        label: "Living Room Tv Power Usage Per Day",
+        data: livingtv,
+        backgroundColor: [],
+        borderColor: "teal",
+      };
+      const graphData2 = {
+        label: "Bedroom Tv Power Usage Per Day",
+        data: bedtv,
+        backgroundColor: [],
+        borderColor: "navy",
+      };
+      const graphData3 = {
+        label: "Dish Washer Power Usage Per Day",
+        data: dishwasher,
+        backgroundColor: [],
+        borderColor: "green",
+      };
+      const graphData4 = {
+        label: "Washing Machine Power Usage Per Day",
+        data: clotheswasher,
+        backgroundColor: [],
+        borderColor: "orange",
+      };
+      const graphData5 = {
+        label: "Bathroom Exhaust Power Usage Per Day",
+        data: exhaust,
+        backgroundColor: [],
+        borderColor: "purple",
+      };
+      const graphData6 = {
+        label: "HVAC Power Usage Per Day",
+        data: hvac,
+        backgroundColor: [],
+        borderColor: "pink",
+      };
+      const graphData7 = {
+        label: "Stove Power Usage Per Day",
+        data: stove,
+        backgroundColor: [],
+        borderColor: "yellow",
+      };
+      const graphData8 = {
+        label: "Oven Power Usage Per Day",
+        data: oven,
+        backgroundColor: [],
+        borderColor: "white",
+      };
+      const graphData9 = {
+        label: "Microwave Power Usage Per Day",
+        data: microwave,
+        backgroundColor: [],
+        borderColor: "grey",
+      };
+    const graphData = {
+        labels: label,
+        datasets: [
+  
+        ],
+    };
+
+      powerResult.labels = label;
+      powerResult.value = value;
+      powerResult.graphData = graphData;
+      powerResult.graphData.datasets.push(graphData0);
+      powerResult.graphData.datasets.push(graphData1);
+      powerResult.graphData.datasets.push(graphData2);
+      powerResult.graphData.datasets.push(graphData3);
+      powerResult.graphData.datasets.push(graphData4);
+      powerResult.graphData.datasets.push(graphData5);
+      powerResult.graphData.datasets.push(graphData6);
+      powerResult.graphData.datasets.push(graphData7);
+      powerResult.graphData.datasets.push(graphData8);
+      powerResult.graphData.datasets.push(graphData9);
+      console.log(powerResult);
+        powerResult.exhaust = exhaust;
+        powerResult.stove = stove;
+        powerResult.clotheswasher = clotheswasher;
+        powerResult.dishwasher = dishwasher;
+        powerResult.bedtv = bedtv;
+        powerResult.hvac = hvac;
+        powerResult.livingtv = livingtv;
+        powerResult.microwave = microwave;
+        powerResult.oven = oven;
+    });
+  
+
+  return powerResult;
 }

@@ -3,6 +3,7 @@ from flask_restful import Api
 from os import getenv
 from routes.weatherRoutes import WeatherDataMonthly
 from routes.waterRoutes import WaterGetMonthly
+from routes.powerRoutes import PowerGetMonthly
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -11,6 +12,7 @@ CORS(app)
 
 api.add_resource(WeatherDataMonthly,"/monthlyweatherdata")
 api.add_resource(WaterGetMonthly,"/monthlywaterdata")
+api.add_resource(PowerGetMonthly,"/monthlypowerdata")
 
 if __name__ == '__main__':
     app.run(

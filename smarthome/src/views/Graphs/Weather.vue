@@ -9,7 +9,7 @@
         :low="weatherData.lows[index]"
       ></temp>
     </div>
-     <div>
+    <div>
       <water
         v-if="index > 0 && tab == 1"
         :date="waterData.labels[index]"
@@ -27,6 +27,10 @@
     <div v-if="callComplete && tab == 1">
       <graph :chartData="waterData.graphData"></graph>
     </div>
+    <div v-if="callComplete && tab ===2">
+      <h2>Power Data Here</h2>
+      <graph :chartData="powerData.graphData"></graph>
+    </div>
     <v-overlay :value="isLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
     </v-overlay>
@@ -38,10 +42,10 @@ import Vue from "vue";
 import { mapState } from "vuex";
 import Graph from "./Graph.vue";
 import TempViewVue from "./TempView.vue";
-import { WeatherCall, WaterCall } from "../../consts";
+import { WeatherCall, WaterCall, PowerCall } from "../../consts";
 import * as models from "../../services/models";
 import { WeatherFuncModel } from "../../services/models";
-import WaterViewVue from './WaterView.vue';
+import WaterViewVue from "./WaterView.vue";
 export default Vue.extend({
   props: ["dates", "tab"],
   data: () => ({
@@ -51,6 +55,7 @@ export default Vue.extend({
     lows: [] as number[],
     weatherData: {} as models.WeatherFuncModel,
     waterData: {} as models.WaterFuncModel,
+    powerData: {} as models.PowerFuncModel,
     isLoading: false,
     month: "",
     callComplete: false,
@@ -67,6 +72,7 @@ export default Vue.extend({
   methods: {
     initialize: WeatherCall,
     waterCall: WaterCall,
+    powerCall: PowerCall,
   },
   created() {
     this.value = [] as number[];
@@ -75,6 +81,7 @@ export default Vue.extend({
     this.lows = [] as number[];
     this.weatherData = {} as models.WeatherFuncModel;
     this.waterData = {} as models.WaterFuncModel;
+    this.powerData = {} as models.PowerFuncModel;
     switch (this.tab) {
       case 0:
         this.callComplete = false;
@@ -106,16 +113,29 @@ export default Vue.extend({
             this.callComplete = true;
           });
         break;
+      case 2:
+        this.isLoading = true;
+        this.callComplete = false;
+        this.powerCall(this.dates, this.value, this.labels)
+          .then((powerResult) => {
+            this.powerData = powerResult;
+          })
+          .finally(() => {
+            this.isLoading = false;
+            this.callComplete = true;
+          });
+          break;
     }
   },
   watch: {
     tab(newVal) {
-    this.value = [] as number[];
-    this.labels = [] as string[];
-    this.highs = [] as number[];
-    this.lows = [] as number[];
-    this.weatherData = {} as models.WeatherFuncModel;
-    this.waterData = {} as models.WaterFuncModel;
+      this.value = [] as number[];
+      this.labels = [] as string[];
+      this.highs = [] as number[];
+      this.lows = [] as number[];
+      this.weatherData = {} as models.WeatherFuncModel;
+      this.waterData = {} as models.WaterFuncModel;
+      this.powerData = {} as models.PowerFuncModel;
       switch (newVal) {
         case 0:
           this.callComplete = false;
@@ -141,12 +161,30 @@ export default Vue.extend({
           this.isLoading = true;
           this.callComplete = false;
           this.waterCall(this.dates, this.value, this.labels)
-            .then((waterResult) => {this.waterData=waterResult; this.waterData.labels=this.labels; console.log(this.waterData);})
+            .then((waterResult) => {
+              this.waterData = waterResult;
+              this.waterData.labels = this.labels;
+              console.log(this.waterData);
+            })
             .finally(() => {
               this.isLoading = false;
               this.callComplete = true;
             });
           break;
+        case 2:
+          this.isLoading = true;
+          this.callComplete = false;
+          this.powerCall(this.dates, this.value, this.labels)
+            .then((powerResult) => {
+              this.powerData = powerResult;
+            })
+            .finally(() => {
+              this.isLoading = false;
+              this.callComplete = true;
+            });
+            break;
+        default:
+          console.log("Tab is " + this.tab);
       }
     },
   },

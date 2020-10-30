@@ -17,6 +17,7 @@ export const WeatherAPI: AxiosInstance = axios.create({
     'Content-Type':'application/json'
   },
 
+
   
 });
 

@@ -11,7 +11,7 @@
       <router-link class="navbar-item" exact-active-class="is-active" to="/"
         >Home</router-link
       >
-      <router-link class="navbar-item" active-class="is-active" to="/about"
+      <router-link class="navbar-item" active-class="is-active" to="/data"
         >Data</router-link
       >
        <router-link class="navbar-item" active-class="is-active" to="/admin"

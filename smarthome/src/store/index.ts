@@ -11,7 +11,7 @@ export interface RootState {
 
 const mutations: MutationTree<RootState> = {
   resetIndex(state) {
-    state.index = 0;
+    state.index = undefined;
   },
   addPower(state, payload: number) {
     state.power += payload;

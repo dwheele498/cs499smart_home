@@ -3,12 +3,20 @@ import calendar
 from datetime import datetime, timedelta
 import random
 import dbinit as db
+import homedashboard.server.dbinitWater as wb
 from marshmallow import Schema, fields, INCLUDE
 
 connection = db.CreateConnection()
 cursor = connection.cursor()
 cursor.execute('select selecteddate from weather')
 datetable = cursor.fetchall()
+
+cursor.execute('select clotheswasher from water_usage')
+clothestable = cursor.fetchall()
+
+
+cursor.execute('select dishwasher from water_usage')
+dishtable = cursor.fetchall()
 
 
 # used 4 times a week
@@ -20,12 +28,9 @@ bathexhaust = ((4500 * .067) / 1000) * 0.12
 hvac = ((3500 * 24) / 1000) * 0.12
 refrigerator = ((150 * 24) / 1000) * 0.12
 
-stove = 0
-dishwasher = 0
-clotheswasher = 0
+clotheswasher = ((500*.5)/1000) * 0.12
 dryer = 0
 light = 0
-
 
 
 def rand():
@@ -36,8 +41,20 @@ def rand():
         return 0
 
 
-def randwash():
-    pass
+# uses dishwash column of water_usage table to determine if power was used or not
+def dishwash():
+    for i in dishtable:
+        if i[0] == 0:
+            return 0
+        else:
+            return 1
+
+def clotheswash():
+    for i in clothestable:
+        if i[0] == 20:
+            return 1
+        else:
+            return 0
 
 
 class PowerSchema(Schema):
@@ -60,7 +77,7 @@ def ClearPower():
         cursor.execute('Drop Table power')
         connection.commit()
         cursor.execute('create table power(id serial PRIMARY KEY, powerdate date, livingtv float, bedtv float, '
-                       'oven float, microwave float, stove float, dishwasher float, clotheswasher float, dryer float, lights float, hvac float, exhaust float)')
+                       'oven float, microwave float, stove float, dishwasher float, clotheswasher float, dryer float, lights float, hvac float, exhaust float, total float)')
         connection.commit()
 
 
@@ -68,7 +85,7 @@ def GeneratePowerDBData():
     powerschema = PowerSchema()
     with connection.cursor() as cursor:
         insert_db = 'INSERT INTO power(powerdate,livingtv,bedtv,oven,microwave,stove,' \
-                    'dishwasher,clotheswasher,dryer,lights,hvac,exhaust) VALUES (%(powerdate)s, %(livingtv)s, %(bedtv)s, %(oven)s, %(microwave)s, %(stove)s, %(dishwasher)s,%(clotheswasher)s,%(dryer)s,%(light)s,%(hvac)s,%(exhaust)s)'
+                    'dishwasher,clotheswasher,dryer,lights,hvac,exhaust,total) VALUES (%(powerdate)s, %(livingtv)s, %(bedtv)s, %(oven)s, %(microwave)s, %(stove)s, %(dishwasher)s,%(clotheswasher)s,%(dryer)s,%(light)s,%(hvac)s,%(exhaust)s,%(total)s)'
         # update_db = 'UPDATE power day = %s livingTv = %s, bedTv = %s, oven = %s, microwave = %s, stove = %s, dishwasher = %s, clotheswasher = %s, dryer = %s, lights = %s, hvac = %s  WHERE id = %s'
         for i in datetable:
             date = i[0]
@@ -76,14 +93,14 @@ def GeneratePowerDBData():
             if day == 'Monday' or 'tuesday' or 'Wednesday' or 'Thursday' or 'Friday':
                 # Formula for cost of power: ((Watts x hours used)/1000 kwh) x 0.12
                 liveTv = (((636 * 4) / 1000) * 0.12) * rand()
-                #print(day, 'livetv', liveTv)
                 bedTv = (((100 * 2) / 1000) * 0.12) * rand()
-                # print(day,'bedtv' , bedTv)
                 microwave = (((1100 * 0.33) / 1000) * 0.1) * rand()
-                # print(day, 'microwave', microwave)
                 oven = (((4000 * 0.75) / 1000) * 0.12) * rand()
-                # print(day, 'oven', oven)
-                total = liveTv + bedTv + oven + microwave
+                dishwasher = (((1800 * 0.75) / 1000) * 0.12) * dishwash()
+                #print(day, 'dishwash', dishwasher)
+                stove = (((3500 * 0.33) / 1000) * 0.12) * rand()
+                clotheswasher = (((500 * .5) / 1000) * 0.12) * clotheswash()
+                total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher
                 # print(day,'total' ,total)
             elif day == 'Saturday' or 'Sunday':
                 liveTv = (((636 * 8) / 1000) * 0.12) * rand()
@@ -94,19 +111,23 @@ def GeneratePowerDBData():
                 # print(day, 'microwave weekend', microwave)
                 oven = (((4000 * 1) / 1000) * 0.12) * rand()
                 # print(day, 'oven weekend', oven)
-                total = liveTv + bedTv + oven + microwave
+                dishwasher = (((1800 * 0.75) / 1000) * 0.12) * dishwash()
+                #print(day, 'dishwash', dishwasher)
+                stove = (((3500 * 0.5) / 1000) * 0.12) * rand()
+                clotheswasher = (((500 * .5) / 1000) * 0.12)*clotheswash()
+                total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher
                 # print(day, 'total weekend', total)
             date = date.strftime("%Y-%m-%d")
             update_usage = powerschema.load({"powerdate": date, "livingtv": liveTv,
-                                             "bedtv": bedTv, "oven": oven,"stove":stove, "microwave": microwave, "clotheswasher": washer,"dishwasher":dishwasher,
-                                             "dryer": dryer, "hvac": hvac,"exhaust":bathexhaust,"light":light,}, unknown=INCLUDE)
+                                             "bedtv": bedTv, "oven": oven, "stove": stove, "microwave": microwave,
+                                             "clotheswasher": washer, "dishwasher": dishwasher,
+                                             "dryer": dryer, "hvac": hvac, "exhaust": bathexhaust, "light": light, 'total': total },
+                                            unknown=INCLUDE)
             # print(update_usage.get('powerdate'))
             cursor.execute(insert_db, update_usage)
             connection.commit()
             # print("updated table")
 
 
-
-
-GeneratePowerDBData()
-# ClearPower()
+#GeneratePowerDBData()
+ClearPower()

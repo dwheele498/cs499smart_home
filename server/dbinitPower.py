@@ -3,7 +3,6 @@ import calendar
 from datetime import datetime, timedelta
 import random
 import dbinit as db
-import homedashboard.server.dbinitWater as wb
 from marshmallow import Schema, fields, INCLUDE
 
 connection = db.CreateConnection()
@@ -118,6 +117,10 @@ def GeneratePowerDBData():
                     j = 1
                     x+=1
                 clotheswasher = (((500 * .5) / 1000) * 0.12) * j
+                if(clotheswasher > 0):
+                    dryer = ((3000 * .5) / 1000) * 0.12
+                else:
+                    dryer = 0
                 print(day, 'clotheswash', clotheswasher)
                 total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher
                 # print(day,'total' ,total)
@@ -141,7 +144,10 @@ def GeneratePowerDBData():
                     j = 1
                     x+=1
                 clotheswasher = (((500 * .5) / 1000) * 0.12) * j
-
+                if(clotheswasher>0):
+                    dryer = ((3000 * .5) / 1000) * 0.12
+                else:
+                    dryer = 0
                 print(day, 'clotheswash', clotheswasher)
                 total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher
                 # print(day, 'total weekend', total)
@@ -157,5 +163,5 @@ def GeneratePowerDBData():
             connection.commit()
             # print("updated table")
 
-#GeneratePowerDBData()
-ClearPower()
+GeneratePowerDBData()
+#ClearPower()

@@ -41,24 +41,6 @@ def rand():
     else:
         return 0
 
-
-# uses dishwash column of water_usage table to determine if power was used or not
-def dishwash():
-    pass
-
-
-
-
-def clotheswash():
-    for i in range(len(datetable)):
-            a = clothestable[i]
-            b = datetable[i]
-            if a[0] == 0:
-                print (calendar.day_name[b[0].weekday()], 0)
-            else:
-                print (calendar.day_name[b[0].weekday()], 1)
-
-
 class PowerSchema(Schema):
     powerdate = fields.Date()
     livingtv = fields.Float()
@@ -130,7 +112,14 @@ def GeneratePowerDBData():
                 # print(day, 'microwave weekend', microwave)
                 oven = (((4000 * 1) / 1000) * 0.12) * rand()
                 # print(day, 'oven weekend', oven)
-                dishwasher = (((1800 * 0.75) / 1000) * 0.12) * dishwash()
+                b = dishtable[y]
+                if b[0] == 0:
+                    v = 0
+                    y += 1
+                else:
+                    v = 1
+                    y += 1
+                dishwasher = (((1800 * 0.75) / 1000) * 0.12) * v
                 # print(day, 'dishwash', dishwasher)
                 stove = (((3500 * 0.5) / 1000) * 0.12) * rand()
                 a = clothestable[x]

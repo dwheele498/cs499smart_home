@@ -3,6 +3,7 @@ from datetime import date
 import pandas as pd
 import psycopg2
 import requests
+from fbprophet import Prophet
 from marshmallow import Schema, fields, ValidationError, INCLUDE
 
 
@@ -36,113 +37,6 @@ def DateTable():
         cursor.execute("create table weather(id serial PRIMARY KEY, tavg int, tlow int, thigh int, selectedDate date)")
         connection.commit()
 
-
-# def GenerateWeatherDbData(start, end):
-#     startSplit = start.split("-")
-#     endSplit = end.split("-")
-#
-#     connection = CreateConnection()
-#
-#     cursor = connection.cursor()
-#     cursor.execute(
-#         "Select day,month,tavg,tlow,thigh from weather ",
-#     )
-#     weatherTable = cursor.fetchall()
-#     weatherSet = set(weatherTable)
-#
-#     size = [x for x in range(int(startSplit[2]), int(endSplit[2]) + 1)]
-#
-#     params = {
-#         "lat": float(33.543682),
-#         "lon": float(-86.779633),
-#         "start": start,
-#         "end": end,
-#     }
-#
-#     class CallSchema(Schema):
-#         lat = fields.Float()
-#         lon = fields.Float()
-#         start = fields.Str()
-#         end = fields.Str()
-#
-#     call = CallSchema()
-#     result = call.dump(params)
-#
-#     class WeatherSchema(Schema):
-#         day: fields.String()
-#         month: fields.String()
-#         tavg: fields.Float()
-#         tmin: fields.Float()
-#         tmax: fields.Float()
-#
-#     if len(weatherTable) == len(size):
-#         connection.commit()
-#         connection.close()
-#         return
-#     else:
-#
-#         weather = WeatherSchema()
-#         res = requests.get(
-#             "https://api.meteostat.net/v2/point/daily",
-#             params=result,
-#             headers={"x-api-key": "1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh"},
-#         )
-#         dataHoleder = dict(res.json())
-#         hold = []
-#         for r in dataHoleder["data"]:
-#             dateSplit = r["date"].split("-")
-#             try:
-#                 z = weather.load(
-#                     {
-#                         "day": dateSplit[2],
-#                         "month": dateSplit[1],
-#                         "tavg": r["tavg"],
-#                         "tmin": r["tmin"],
-#                         "tmax": r["tmax"],
-#                     },
-#                     unknown=INCLUDE,
-#                 )
-#                 hold.append(z)
-#             except ValidationError as err:
-#                 print(err.messages)
-#
-#         for t in hold:
-#             if t["tavg"] is not None:
-#                 try:
-#                     t["tavg"] = math.floor(t["tavg"] * 1.8 + 32)
-#                     t["tmin"] = math.floor(t["tmin"] * 1.8 + 32)
-#                     t["tmax"] = math.floor(t["tmax"] * 1.8 + 32)
-#                 except TypeError as err:
-#                     print(err)
-#         for el in hold:
-#             tester = (int(el['day']), int(el['month']), int(el['tavg']), int(el['tmin']), int(el['tmax']))
-#             if len(weatherSet) > 0:
-#                 if tester in weatherSet:
-#                     print("Duplicate rows")
-#                 else:
-#                     cursor.execute(
-#                         "INSERT INTO Weather (tavg,day,month,tlow,thigh) VALUES (%s,%s,%s,%s,%s)",
-#                         (
-#                             int(el["tavg"]),
-#                             int(el["day"]),
-#                             int(el["month"]),
-#                             int(el["tmin"]),
-#                             int(el["tmax"]),
-#                         ),
-#                     )
-#             else:
-#                 cursor.execute(
-#                     "INSERT INTO Weather (tavg,day,month,tlow,thigh) VALUES (%s,%s,%s,%s,%s)",
-#                     (
-#                         int(el["tavg"]),
-#                         int(el["day"]),
-#                         int(el["month"]),
-#                         int(el["tmin"]),
-#                         int(el["tmax"]),
-#                     ),
-#                 )
-#         connection.commit()
-#         cursor.close()
 
 
 def WeatherData(start:date,end:date):
@@ -227,7 +121,7 @@ def WeatherData(start:date,end:date):
             tester = (el["selectedDate"], int(el['tavg']), int(el['tmin']), int(el['tmax']))
             if len(weatherSet) > 0:
                 if tester in weatherSet:
-                    print("Duplicate rows")
+                    print('duplicate rows')
                 else:
                     cursor.execute(
                         "INSERT INTO Weather (tavg,selectedDate,tlow,thigh) VALUES (%s,%s,%s,%s)",
@@ -251,11 +145,27 @@ def WeatherData(start:date,end:date):
         connection.commit()
         cursor.close()
 
+def Prediction():
+    connection = CreateConnection()
+    with connection.cursor() as cursor:
+        cursor.execute("Select selectedDate,tavg from weather where selectedDate >= %s and selectedDate <= %s",('2020-01-01',date.today()))
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=["ds","y"])
+        m = Prophet()
+        m.fit(df)
+        future = m.make_future_dataframe(periods=30,include_history=False)
+        prediction = m.predict(future)
+        return (prediction[['ds','yhat']])
+
+
+
+
+
 
 # ReCreateWeatherTable()
 # DateTable()
 # WeatherData()
-# z = date.today().replace(day=1)
-# l = date.today().replace(day=13)
+# z = date.today().replace(day=26)
+# l = date.today()
 # WeatherData(z,l)
-# GenerateWeatherDbData("2020-10-01", "2020-10-04")
+# Prediction('2020-01-01','2020-10-31',30)

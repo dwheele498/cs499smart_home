@@ -316,3 +316,30 @@ export async function PowerCall(
 
   return powerResult;
 }
+
+export async function WeatherPrediction(
+  value: number[],
+  label: string[],
+
+): Promise<models.GraphData>{
+  const graphData = {} as models.GraphData;
+  await weatherApi.getPrediction().then((result: any)=>{
+    result.forEach((prediction: models.WeatherPredictionModel) => {
+      label.push(prediction.date);
+      value.push(prediction.temp);
+    });
+  }).finally(()=>{
+    this.graphData = {
+      labels: label,
+      datasets: [
+        {
+          label: "Predicted Avg Temp Per Day",
+          data: value,
+          backgroundColor: ["#32a852"],
+          borderColor: "red",
+        },
+      ],
+    };
+  })
+  return graphData;
+}

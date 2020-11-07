@@ -8,7 +8,12 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    children:[
+      {path:'doors',component:()=>import('../views/HomeTabs/HomeDoors.vue')},
+      {path:'lights',component:()=>import('../views/HomeTabs/HomeLights.vue')},
+      {path:'windows',component:()=>import('../views/HomeTabs/HomeWindows.vue')}
+    ]
   },
   {
     path: '/data',

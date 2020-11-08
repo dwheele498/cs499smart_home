@@ -29,8 +29,6 @@ hvac = ((3500 * 24) / 1000) * 0.12
 refrigerator = ((150 * 24) / 1000) * 0.12
 
 clotheswasher_formula_wd = ((500 * .5) / 1000) * 0.12
-dryer = 0
-light = 0
 tvformula_wd = (((636 * 4) / 1000) * 0.12)
 bedtv_formula_wd = (((100 * 2) / 1000) * 0.12)
 microwave_formula_wd = (((1100 * 0.33) / 1000) * 0.1)
@@ -45,6 +43,7 @@ def rand():
         return 1
     else:
         return 0
+
 
 class PowerSchema(Schema):
     powerdate = fields.Date()
@@ -147,6 +146,7 @@ def GeneratePowerDBData():
                 else:
                     dryer = 0
                 print(day, 'clotheswash', clotheswasher)
+
                 light = ((60*random.randint(1, 17)/100)*.12)
                 total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer
                 # print(day, 'total weekend', total)

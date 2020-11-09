@@ -170,5 +170,5 @@ def GeneratePowerDBData():
             # print("updated table")
 
 
-GeneratePowerDBData()
+#GeneratePowerDBData()
 #ClearPower()

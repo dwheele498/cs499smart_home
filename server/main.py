@@ -5,7 +5,6 @@ from os import getenv
 from test import TestRequest, PostTest, WeatherDataMonthly
 from flask_cors import CORS
 
-from routes.demo import demo_blueprint
 # load_dotenv()
 app = Flask(__name__)
 api = Api(app)
@@ -21,7 +20,6 @@ def status():
 # register routes in other modules.
 # Here is an example
 
-app.register_blueprint(demo_blueprint, url_prefix='/demo')
 api.add_resource(TestRequest,"/test")
 api.add_resource(PostTest,"/posttest")
 api.add_resource(WeatherDataMonthly,"/monthlyweatherdata")

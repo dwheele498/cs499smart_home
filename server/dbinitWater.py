@@ -2,7 +2,19 @@ import psycopg2
 import calendar
 from datetime import datetime, timedelta
 import random
+from dbinit import CreateConnection
+import pandas as pd
+from fbprophet import Prophet
 
+
+def ClearTable():
+    connection = CreateConnection()
+    with connection.cursor() as cursor:
+        cursor.execute('Drop Table water_usage')
+        connection.commit()
+        cursor.execute('create table water_usage(id serial PRIMARY KEY, waterdate date, '
+                       'clotheswasher float, shower float, bath float, dishwasher float)')
+        connection.commit()
 
 def GenerateWaterDbData():
     """
@@ -37,14 +49,18 @@ def GenerateWaterDbData():
     bath = waterFixture(30, .65, 30)
     dish = waterFixture(6, 1, 45)
     i = 0
+    connection = CreateConnection()
     #print("i\tdate\tmonth\tyear\tclothes\tshower\tbathe\tdish")
     #generates last 90 days
-    postgres_insert_query = """ INSERT INTO water_usage (id, day, month, year, clotheswasher, shower, bath, dishwasher) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) """
-    postgres_update_query = """ UPDATE water_usage set id = %s, day = %s, month = %s, year = %s, clotheswasher = %s, shower = %s, bath = %s, dishwasher = %s WHERE id = %s """
+    postgres_insert_query = """ INSERT INTO water_usage (waterdate, clotheswasher, shower, bath, dishwasher) 
+    VALUES (%s, %s, %s, %s, %s) """
+    # postgres_update_query = """ UPDATE water_usage set id = %s, day = %s, month = %s, year = %s, clotheswasher = %s, shower = %s, bath = %s, dishwasher = %s WHERE id = %s """
     print("updating 90 rows from water_usage...")
-    for i in range(90):
+    daterange = pd.date_range(end=datetime.today(), start=datetime.today().replace(month=datetime.today().month-2))
+    for i in daterange:
         #datetimeobject
-        my_date = datetime.now() - timedelta(days = i)
+        # my_date = datetime.now() - timedelta(days = i)
+        my_date = i
         my_weekday = calendar.day_name[my_date.weekday()]
         if ("Monday" == my_weekday or "Tuesday" == my_weekday or "Wednesday" == my_weekday or "Thursday" == my_weekday or "Friday" == my_weekday):
             dailyClothesWasher = (clothesW.rate * randomWaterTrigger())
@@ -58,19 +74,27 @@ def GenerateWaterDbData():
             dailyDishWasher = (dish.rate * randomWaterTrigger())
         #send to db(index(year,month,day))
         #record_to_insert = (i, my_date.day,my_date.month,my_date.year,dailyClothesWasher,dailyShower,dailyBath,dailyDishWasher)
-        record_to_update = (i, my_date.day,my_date.month,my_date.year,dailyClothesWasher,dailyShower,dailyBath,dailyDishWasher, i)
-        connection = psycopg2.connect(
-            database="Team3DB",
-            user="Team3",
-            password="3Team3",
-            host='127.0.0.1',
-            port='5432'
-        )
-        cursor = connection.cursor()
-        #cursor.execute(postgres_insert_query, record_to_insert)
-        cursor.execute(postgres_update_query, record_to_update) 
-        #print(i,"\t",my_date.day,"\t",my_date.month,"\t",my_date.year,"\t",dailyClothesWasher,"\t",dailyShower,"\t",dailyBath,"\t",dailyDishWasher)
-        connection.commit()
+        record_to_update = (my_date,dailyClothesWasher,dailyShower,dailyBath,dailyDishWasher)
+        with connection.cursor() as cursor:
+            cursor.execute(postgres_insert_query, record_to_update)
+            connection.commit()
         cursor.close()
-        connection.close()
+    connection.close()
     print("update complete")
+
+def Prediction():
+    connection = CreateConnection()
+    with connection.cursor() as cursor:
+        cursor.execute("Select selectedDate,tavg from weather where selectedDate >= %s and selectedDate <= %s",('2020-01-01',date.today()))
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=["ds","y"])
+        m = Prophet()
+        m.fit(df)
+        future = m.make_future_dataframe(periods=30,include_history=False)
+        prediction = m.predict(future)
+        return (prediction[['ds','yhat']])
+
+
+
+GenerateWaterDbData()
+#ClearTable()

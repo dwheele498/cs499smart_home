@@ -321,15 +321,26 @@ export async function WeatherPrediction(
   value: number[],
   label: string[],
 
-): Promise<models.GraphData>{
-  const graphData = {} as models.GraphData;
+): Promise<models.WeatherPredcitGraphModel>{
+  const wpModel = {} as models.WeatherPredcitGraphModel;
   await weatherApi.getPrediction().then((result: any)=>{
-    result.forEach((prediction: models.WeatherPredictionModel) => {
-      label.push(prediction.date);
-      value.push(prediction.temp);
+    result.data.forEach((prediction: models.WeatherPredictionModel) => {
+      label.push(prediction[0]);
+      value.push(Math.floor(prediction[1]));
     });
   }).finally(()=>{
-    this.graphData = {
+    // graphData.label=label;= {
+    //   labels: label,
+    //   datasets: [
+    //     {
+    //       label: "Predicted Avg Temp Per Day",
+    //       data: value,
+    //       backgroundColor: ["#32a852"],
+    //       borderColor: "red",
+    //     },
+    //   ],
+    // };
+    const graphData = {
       labels: label,
       datasets: [
         {
@@ -339,7 +350,12 @@ export async function WeatherPrediction(
           borderColor: "red",
         },
       ],
-    };
+    } as models.GraphData;
+    wpModel.labels = label;
+    wpModel.value = value;
+    wpModel.chartData = graphData;
+
   })
-  return graphData;
+  return wpModel;
+
 }

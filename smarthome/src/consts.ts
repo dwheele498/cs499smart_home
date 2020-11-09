@@ -117,8 +117,7 @@ export async function WaterCall(
         clothes.push(water.clotheswasher);
         bath.push(water.bath);
         shower.push(water.shower);
-        const dt = DateTime.local()
-          .set({ month: water.month, day: water.day })
+        const dt = DateTime.fromISO(water.date)
           .toFormat("M/d");
         label.push(dt);
       });

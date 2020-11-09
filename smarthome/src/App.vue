@@ -17,6 +17,9 @@
        <router-link class="navbar-item" active-class="is-active" to="/admin"
         >Admin</router-link
       >
+      <router-link class="navbar-item" active-class="is-active" to="/predictions"
+        >Forecast</router-link
+      >
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on">

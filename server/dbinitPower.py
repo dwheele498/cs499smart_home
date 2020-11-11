@@ -153,7 +153,7 @@ def GeneratePowerDBData():
                     dryer = ((3000 * .5) / 1000) * 0.12
                 else:
                     dryer = 0
-                light = ((60 * random.randint(1, 17) / 100) * .12)
+                light = ((60 * random.randint(1, 17) / 1000) * .12)
                 hvac = ((3500 * random.randint(1, 24)) / 1000) * 0.12
                 total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer
                 #print(day, 'total weekend', total)
@@ -164,11 +164,10 @@ def GeneratePowerDBData():
                                              "dryer": dryer, "hvac": hvac, "exhaust": bathexhaust, "light": light,
                                              'total': total},
                                             unknown=INCLUDE)
-            # print(update_usage.get('powerdate'))
 
             cursor.execute(insert_db, update_usage)
             connection.commit()
-            # print("updated table")
+
 
 
 GeneratePowerDBData()

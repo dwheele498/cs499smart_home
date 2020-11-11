@@ -3,6 +3,7 @@ import calendar
 from datetime import datetime, timedelta
 import random
 import dbinit as db
+import pandas as pd
 from marshmallow import Schema, fields, INCLUDE
 
 connection = db.CreateConnection()
@@ -12,17 +13,16 @@ datetable = cursor.fetchall()
 
 cursor.execute('select clotheswasher from water_usage')
 clothestable = cursor.fetchall()
-# print(clothestable)
+
 
 cursor.execute('select dishwasher from water_usage')
 dishtable = cursor.fetchall()
-# print(dishtable)
+
 
 
 # used 4 times a week
-washer = ((500 * 0.75) / 1000) * 0.12
 dryer_formula_wd = ((3000 * .5) / 1000) * 0.12
-
+ 
 # used everyday
 bathexhaust = ((4500 * .067) / 1000) * 0.12
 refrigerator = ((150 * 24) / 1000) * 0.12
@@ -85,8 +85,9 @@ def GeneratePowerDBData():
                     ' %(dishwasher)s,%(clotheswasher)s,%(dryer)s,%(light)s,%(hvac)s,%(exhaust)s,%(total)s)'
         x = 0
         y = 0
-        for i in datetable:
-            date = i[0]
+        daterange = pd.date_range(end=datetime.today(), start=datetime.today().replace(month=datetime.today().month-2))
+        for i in daterange:
+            date = i
             day = calendar.day_name[date.weekday()]
             if day == 'Monday' or 'tuesday' or 'Wednesday' or 'Thursday' or 'Friday':
                 # Formula for cost of power: ((Watts x hours used)/1000 kwh) x 0.12
@@ -155,7 +156,7 @@ def GeneratePowerDBData():
                 light = ((60 * random.randint(1, 17) / 100) * .12)
                 hvac = ((3500 * random.randint(1, 24)) / 1000) * 0.12
                 total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer
-                # print(day, 'total weekend', total)
+                #print(day, 'total weekend', total)
             date = date.strftime("%Y-%m-%d")
             update_usage = powerschema.load({"powerdate": date, "livingtv": liveTv,
                                              "bedtv": bedTv, "oven": oven, "stove": stove, "microwave": microwave,
@@ -170,5 +171,5 @@ def GeneratePowerDBData():
             # print("updated table")
 
 
-#GeneratePowerDBData()
+GeneratePowerDBData()
 #ClearPower()

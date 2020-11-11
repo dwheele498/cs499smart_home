@@ -170,5 +170,5 @@ def GeneratePowerDBData():
 
 
 
-GeneratePowerDBData()
+#GeneratePowerDBData()
 #ClearPower()

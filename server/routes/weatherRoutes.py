@@ -4,7 +4,7 @@ from flask import request
 import psycopg2
 from datetime import datetime
 import json
-from server.dbGen.weatherDbGen import CreateConnection, WeatherData, Prediction
+from dbGen.weatherDbGen import CreateConnection, WeatherData, Prediction
 
 
 

@@ -8,7 +8,7 @@
       >Menu</v-btn
     >
     <v-btn v-else class="mb-auto">
-      <router-link class="navbar-item" exact-active-class="is-active" to="/"
+      <router-link class="navbar-item" exact-active-class="is-active" to="/lights"
         >Home</router-link
       >
       <router-link class="navbar-item" active-class="is-active" to="/data"

@@ -29,7 +29,7 @@ export default Vue.extend({
           {
             ticks: {
               fontColor: 'darkgrey',
-              beginAtZero: true,
+              beginAtZero: false,
             },
           },
         ],

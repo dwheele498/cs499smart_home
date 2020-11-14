@@ -328,17 +328,6 @@ export async function WeatherPrediction(
       value.push(Math.floor(prediction[1]));
     });
   }).finally(()=>{
-    // graphData.label=label;= {
-    //   labels: label,
-    //   datasets: [
-    //     {
-    //       label: "Predicted Avg Temp Per Day",
-    //       data: value,
-    //       backgroundColor: ["#32a852"],
-    //       borderColor: "red",
-    //     },
-    //   ],
-    // };
     const graphData = {
       labels: label,
       datasets: [

@@ -68,11 +68,14 @@ const store = new Vuex.Store<RootState>({
       "BedTv": false,
       "LiveTv": false,
       "Dishwasher": false,
-      "Clothswasher": false,
+      "Clotheswasher": false,
       "Clothesdryer": false,
     },
     water: {
-
+      "Dishwasher": false,
+      "Clotheswasher": false,
+      "Shower": false,
+      "Bath": false,
     },
     doors: {
       "Master Bedroom Door": false,

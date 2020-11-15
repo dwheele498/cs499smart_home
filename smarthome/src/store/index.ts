@@ -71,14 +71,14 @@ const store = new Vuex.Store<RootState>({
       "Oven": {on:false,amt:0},
       "BedTv": {on:false,amt:0},
       "LiveTv": {on:false,amt:0},
-      "DishWasher": {on:false,amt:0},
-      "ClothsWasher": {on:false,amt:0},
-      "ClothesDryer": {on:false,amt:0},
+      "Dish Washer": {on:false,amt:0},
+      "Washing Machine": {on:false,amt:0},
+      "Dryer": {on:false,amt:0},
     },
     
     water: {
-      "ClothesWasher": {on:false,amt:0},
-      "DishWasher": {on:false,amt:0},
+      "Washing Machine": {on:false,amt:0},
+      "Dish Washer": {on:false,amt:0},
       "Shower": {on:false,amt:0},
       "Bath": {on:false,amt:0}
     },

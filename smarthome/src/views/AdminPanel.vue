@@ -26,7 +26,7 @@
       <v-row>
         <v-banner>Water Control</v-banner>
         <v-col v-for="wat in water" :key="wat + ' ' + 'water'">
-          <v-switch @change="fireWaterEvent($event)" color="teal darken-4" :label="wat"></v-switch>
+          <v-switch @change="fireWaterEvent($event,wat)" color="teal darken-4" :label="wat"></v-switch>
         </v-col>
       </v-row>
       <v-row>
@@ -49,42 +49,42 @@ export default Vue.extend({
     rooms: [] as string[],
     power: [] as string[],
     water: [] as string[],
+    timer: new Timer(),
   }),
   created() {
-    this.resetPower();
-    this.resetWater();
     this.rooms = ROOMS;
     this.power = POWER_DEVICES;
     this.water = WATER_DEVICES;
   },
   methods: {
-    ...mapMutations(['addPower','addWater','resetPower','resetWater']),
-    getTime(){
+    ...mapMutations(['addPower','addWater']),
+    getTime(): number{
       console.log('Sending time');
-      const sp = this.$timer.getTimeValues().toString().split(':');
+      const sp = this.timer.getTimeValues().toString().split(':');
       Number.parseInt(sp[2])<30?sp[2]='30':sp[2];
-      this.addPower(Number.parseInt(sp[2]));
+      return (Number.parseInt(sp[2]));
       
     },
-    firePowerEvent(event: any){
+    firePowerEvent(event: any, name: string){
       console.log(event);
       if(event===true){
-        this.$timer.start()
+        this.timer.start()
       } 
       else{
-        this.$timer.pause();
-        this.getTime();
-        this.$timer.stop();
+        this.timer.pause();
+        this.addPower([name,this.getTime()])
+        this.timer.stop();
       }
     },
-    fireWaterEvent(event: any){
+    fireWaterEvent(event: any, name: string){
+      console.log(name);
            if(event===true){
-        this.$timer.start();
+        this.timer.start();
       } 
       else{
-        this.$timer.pause()
-        this.addWater(1);
-        this.$timer.stop();
+        this.timer.pause()
+        this.addWater([name,this.getTime()]);
+        this.timer.stop();
       }
     }
   },

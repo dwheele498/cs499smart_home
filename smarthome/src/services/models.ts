@@ -7,3 +7,4 @@ export * from './models/WaterFuncModel';
 export * from './models/PowerModel';
 export * from './models/PowerFuncModel';
 export * from './models/HourlyWeatherModel';
+export * from './models/UpdateDbModel';

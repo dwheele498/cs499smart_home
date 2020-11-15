@@ -1,12 +1,14 @@
 import Vue from "vue";
 import Vuex, { MutationTree } from "vuex";
+import { UpdateDbModel } from "../services/models";
+
 
 Vue.use(Vuex);
 
 export interface RootState {
   index?: number;
-  power: Record<string, boolean>;
-  water: Record<string, boolean>;
+  power: Record<string, UpdateDbModel>;
+  water: Record<string, UpdateDbModel>;
   doors: Record<string, boolean>;
   lights: Record<string,boolean>;
   windows: Record<string,boolean>;
@@ -16,17 +18,19 @@ const mutations: MutationTree<RootState> = {
   resetIndex(state) {
     state.index = undefined;
   },
-  addPower(state, payload: number) {
-    state.power += payload;
+  addPower(state, payload: [string,number]) {
+    for (const[k,v] of Object.entries(state.power)){
+      if(k==payload[0]){
+        state.power[k].amt += payload[1];
+      }
+    }
   },
-  addWater(state, payload: number) {
-    state.water += payload;
-  },
-  resetPower(state) {
-    state.power = 0;
-  },
-  resetWater(state) {
-    state.water = 0;
+  addWater(state, payload: [string,number]) {
+    for (const[k,v] of Object.entries(state.water)){
+      if(k==payload[0]){
+        state.water[k].amt += payload[1];
+      }
+    }
   },
   openCloseDoor(state, payload: string) {
     for (const [k, v] of Object.entries(state.doors)) {
@@ -62,17 +66,21 @@ const store = new Vuex.Store<RootState>({
   state: {
     index: undefined,
     power: {
-      "Microwave": false,
-      "Stove": false,
-      "Oven": false,
-      "BedTv": false,
-      "LiveTv": false,
-      "Dishwasher": false,
-      "Clothswasher": false,
-      "Clothesdryer": false,
+      "Microwave": {on:false,amt:0},
+      "Stove": {on:false,amt:0},
+      "Oven": {on:false,amt:0},
+      "BedTv": {on:false,amt:0},
+      "LiveTv": {on:false,amt:0},
+      "DishWasher": {on:false,amt:0},
+      "ClothsWasher": {on:false,amt:0},
+      "ClothesDryer": {on:false,amt:0},
     },
+    
     water: {
-
+      "ClothesWasher": {on:false,amt:0},
+      "DishWasher": {on:false,amt:0},
+      "Shower": {on:false,amt:0},
+      "Bath": {on:false,amt:0}
     },
     doors: {
       "Master Bedroom Door": false,

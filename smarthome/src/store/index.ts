@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 export interface RootState {
   index?: number;
-  power: number;
-  water: number;
+  power: Record<string, boolean>;
+  water: Record<string, boolean>;
   doors: Record<string, boolean>;
   lights: Record<string,boolean>;
   windows: Record<string,boolean>;
@@ -61,8 +61,19 @@ const mutations: MutationTree<RootState> = {
 const store = new Vuex.Store<RootState>({
   state: {
     index: undefined,
-    power: 0,
-    water: 0,
+    power: {
+      "Microwave": false,
+      "Stove": false,
+      "Oven": false,
+      "BedTv": false,
+      "LiveTv": false,
+      "Dishwasher": false,
+      "Clothswasher": false,
+      "Clothesdryer": false,
+    },
+    water: {
+
+    },
     doors: {
       "Master Bedroom Door": false,
       "Kid's Bedroom 1 Door": false,

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
+import { component } from 'vue/types/umd';
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -27,6 +28,11 @@ const routes: Array<RouteConfig> = [
     path:'/admin',
     name: 'Admin',
     component:()=>import('../views/AdminPanel.vue')
+  },
+  {
+    path:'/predictions',
+    name:'Predictions',
+    component:()=>import('../views/Predictions.vue')
   }
 ]
 

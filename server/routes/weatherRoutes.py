@@ -4,7 +4,8 @@ from flask import request
 import psycopg2
 from datetime import datetime
 import json
-from dbGen.weatherDbGen import CreateConnection, WeatherData
+from dbGen.weatherDbGen import CreateConnection, WeatherData, Prediction
+
 
 
 
@@ -47,3 +48,14 @@ class WeatherDataMonthly(Resource):
             response.append(weather_schema.load({'tavg':d[0],'selectedDate':str(d[1]),'tmin':d[2],'tmax':d[3]}))
         connection.close()
         return({'data': response}), 200
+
+
+class GetWeatherPrediction(Resource):
+    @classmethod
+    def get(cls):
+        data = Prediction()
+        data = data.rename(columns={'ds':'Dates','yhat':'Avg Temp'})
+        data = data.astype({'Dates':'str'})
+        # data = data.to_json(orient='records')
+        return(data.values.tolist()),200
+

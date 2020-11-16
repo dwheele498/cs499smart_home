@@ -3,6 +3,5 @@ export interface WaterModel{
     dishwasher: number,
     bath: number,
     shower: number,
-    day: number,
-    month: number
+    date: string
 }

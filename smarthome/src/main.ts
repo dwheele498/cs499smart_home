@@ -6,6 +6,7 @@ import vuetify from "@/plugins/vuetify";
 import "../node_modules/bulma/css/bulma.css";
 import Timer from "easytimer.js";
 
+
 const countTimer = new Timer();
 
 Vue.config.productionTip = false;

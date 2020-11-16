@@ -3,7 +3,7 @@ from marshmallow import Schema, fields, INCLUDE
 from flask import request
 from datetime import datetime
 import psycopg2
-from dbGen.weatherDbGen import CreateConnection
+from dbGen.dbinitWeather import CreateConnection
 
 
 class PowerSchema(Schema):

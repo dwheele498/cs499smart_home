@@ -4,7 +4,7 @@ from flask import request
 import psycopg2
 from datetime import datetime
 import json
-from dbGen.weatherDbGen import CreateConnection, WeatherData, Prediction
+from dbGen.dbinitWeather import CreateConnection, WeatherData, Prediction
 
 
 
@@ -58,4 +58,5 @@ class GetWeatherPrediction(Resource):
         data = data.astype({'Dates':'str'})
         # data = data.to_json(orient='records')
         return(data.values.tolist()),200
+
 

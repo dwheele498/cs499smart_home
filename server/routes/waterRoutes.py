@@ -3,7 +3,8 @@ from marshmallow import Schema, fields, INCLUDE
 from flask import request
 from datetime import datetime
 import psycopg2
-from dbGen.weatherDbGen import CreateConnection
+from dbGen.dbinitWeather import CreateConnection
+from dbGen.dbinitWater import Prediction
 
 
 class WaterGetSchema(Schema):
@@ -25,7 +26,7 @@ waterGet = WaterGetSchema()
 
 
 class WaterGetMonthly(Resource):
-    def get(cls):
+    def get(self):
         dates = waterRequest.load(request.args,unknown=INCLUDE)
         start = dates.get('start')
         end = dates.get('end')
@@ -47,3 +48,11 @@ class WaterGetMonthly(Resource):
                 holderStart.append(waterGet.load({'date':str(i[0]),'dishwasher':i[1],'clotheswasher':i[2],'shower':i[3],'bath':i[4]},unknown=INCLUDE))
             print(holderStart)
             return {'start': holderStart, 'end':holderEnd}, 200
+
+class WaterPrediction(Resource):
+    def get(self):
+        data = Prediction()
+        data = data.rename(columns={'ds':'Dates','yhat':'Estimate Total Water'})
+        data = data.astype({'Dates':'str'})
+        # data = data.to_json(orient='records')
+        return(data.values.tolist()),200

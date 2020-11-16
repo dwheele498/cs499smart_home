@@ -30,7 +30,7 @@ powerrequest = PowerRequestSchema()
 
 
 class PowerGetMonthly(Resource):
-    def get(cls):
+    def get(self):
         dates = powerrequest.load(request.args,unknown=INCLUDE)
         start = dates.get('start')
         end = dates.get('end').split('-')

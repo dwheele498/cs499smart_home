@@ -21,7 +21,11 @@
 <script lang="ts">
 import Vue from "vue";
 import TabViewsVue from "./Graphs/TabViews.vue";
-import { PowerPrediction, WaterPrediction, WeatherPrediction } from "../predictions";
+import {
+  PowerPrediction,
+  WaterPrediction,
+  WeatherPrediction,
+} from "../predictions";
 import { GraphData, PredictionModel } from "../services/models";
 import GraphVue from "./Graphs/Graph.vue";
 import { PredcitGraphModel } from "../services/models";
@@ -48,7 +52,8 @@ export default Vue.extend({
     },
   },
   created() {
-      this.callComplete = false;
+    this.isLoading = true;
+    this.callComplete = false;
     this.weathercall(this.value, this.labels)
       .then((result: PredcitGraphModel) => {
         console.log(result);
@@ -56,9 +61,10 @@ export default Vue.extend({
       })
       .finally(() => {
         this.callComplete = true;
+        this.isLoading = false;
       });
   },
-    watch: {
+  watch: {
     tab(newVal) {
       this.value = [] as number[];
       this.labels = [] as string[];
@@ -67,8 +73,8 @@ export default Vue.extend({
         case 0:
           this.callComplete = false;
           this.isLoading = true;
-          this.weathercall(this.value,this.labels
-          ).then((weather) => {
+          this.weathercall(this.value, this.labels)
+            .then((weather) => {
               this.prediction = weather;
               console.log(this.prediction);
             })
@@ -95,7 +101,7 @@ export default Vue.extend({
         case 2:
           this.isLoading = true;
           this.callComplete = false;
-          this.powercall(this.value,this.labels)
+          this.powercall(this.value, this.labels)
             .then((powerResult) => {
               this.prediction = powerResult;
             })
@@ -103,7 +109,7 @@ export default Vue.extend({
               this.isLoading = false;
               this.callComplete = true;
             });
-            break;
+          break;
         default:
           console.log("Tab is " + this.tab);
       }

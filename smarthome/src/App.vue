@@ -62,10 +62,12 @@
     >
     <router-view />
   </v-app>
+  
 </template>
 <script lang="ts">
 import Vue from "vue";
 import Thermostat from "./views/Thermostat.vue";
+
 
 export default Vue.extend({
   name: "App",

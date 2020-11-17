@@ -1,12 +1,13 @@
 import psycopg2
 import calendar
-from datetime import datetime, timedelta
+from datetime import date,datetime, timedelta
 import random
-import dbinit as db
+from dbGen.dbinitWeather import CreateConnection
 import pandas as pd
 from marshmallow import Schema, fields, INCLUDE
+from fbprophet import Prophet
 
-connection = db.CreateConnection()
+connection = CreateConnection()
 cursor = connection.cursor()
 cursor.execute('select selecteddate from weather')
 datetable = cursor.fetchall()
@@ -168,6 +169,18 @@ def GeneratePowerDBData():
             cursor.execute(insert_db, update_usage)
             connection.commit()
 
+
+def Prediction():
+    connection = CreateConnection()
+    with connection.cursor() as cursor:
+        cursor.execute("Select powerdate,total from power where powerdate >= %s and powerdate < %s",('2020-01-01',date.today()))
+        data = cursor.fetchall()
+        df = pd.DataFrame(data, columns=["ds", "y"])
+        m = Prophet()
+        m.fit(df)
+        future = m.make_future_dataframe(periods=30, include_history=False)
+        prediction = m.predict(future)
+        return (prediction[['ds', 'yhat']])
 
 
 #GeneratePowerDBData()

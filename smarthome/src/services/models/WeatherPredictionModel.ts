@@ -1,4 +1,4 @@
-export interface WeatherPredictionModel{
+export interface PredictionModel{
     date:string,
     temp:number
 

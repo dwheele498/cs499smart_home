@@ -4,6 +4,7 @@ from flask import request
 from datetime import datetime
 import psycopg2
 from dbGen.dbinitWeather import CreateConnection
+from dbGen.dbinitPower import Prediction
 
 
 class PowerSchema(Schema):
@@ -54,3 +55,11 @@ class PowerGetMonthly(Resource):
                                                   'stove':i[5],'dishwasher':i[6],'clotheswasher':i[7],'hvac':i[8],'exhaust':i[9]},unknown=INCLUDE))
             print(holderStart)
             return {'start': holderStart}, 200
+
+class PowerPrediction(Resource):
+    def get(self):
+        data = Prediction()
+        data = data.rename(columns={'ds': 'Dates', 'yhat': 'Total Power Usage'})
+        data = data.astype({'Dates': 'str'})
+        # data = data.to_json(orient='records')
+        return (data.values.tolist()), 200

@@ -1,5 +1,6 @@
 import {Api} from './api';
 import {WaterModel} from './models/WaterModel';
+import {PredictionModel} from './models';
 
 class WaterApi{
 getMonth = (start: string, end: string)=>
@@ -9,5 +10,9 @@ getMonth = (start: string, end: string)=>
             end
         }
     })
+
+getPrediction = ()=>
+    Api.get<[PredictionModel]>('/monthlywaterprediction')
+
 }
 export const waterApi = new WaterApi();

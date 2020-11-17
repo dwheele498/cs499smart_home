@@ -2,7 +2,7 @@ import { Api, WeatherAPI } from "./api";
 import { WEATHER_STATS } from "../consts";
 import { WeatherModel } from "./models/WeatherModel";
 import { HourlyWeatherModel } from "./models/HourlyWeatherModel";
-import { WeatherPredictionModel } from "./models";
+import { PredictionModel } from "./models";
 
 class WeatherApi {
   getDay = (start: string, end: string) =>
@@ -22,6 +22,6 @@ class WeatherApi {
       },
     });
   getPrediction = () =>
-    Api.get<[WeatherPredictionModel]>("/monthlyweatherprediction");
+    Api.get<[PredictionModel]>("/monthlyweatherprediction");
 }
 export const weatherApi = new WeatherApi();

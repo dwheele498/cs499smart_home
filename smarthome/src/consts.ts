@@ -315,35 +315,3 @@ export async function PowerCall(
 
   return powerResult;
 }
-
-export async function WeatherPrediction(
-  value: number[],
-  label: string[],
-
-): Promise<models.WeatherPredcitGraphModel>{
-  const wpModel = {} as models.WeatherPredcitGraphModel;
-  await weatherApi.getPrediction().then((result: any)=>{
-    result.data.forEach((prediction: models.WeatherPredictionModel) => {
-      label.push(prediction[0]);
-      value.push(Math.floor(prediction[1]));
-    });
-  }).finally(()=>{
-    const graphData = {
-      labels: label,
-      datasets: [
-        {
-          label: "Predicted Avg Temp Per Day",
-          data: value,
-          backgroundColor: ["#32a852"],
-          borderColor: "red",
-        },
-      ],
-    } as models.GraphData;
-    wpModel.labels = label;
-    wpModel.value = value;
-    wpModel.chartData = graphData;
-
-  })
-  return wpModel;
-
-}

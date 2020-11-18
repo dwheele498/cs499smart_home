@@ -1,25 +1,28 @@
 <template>
   <v-row>
-        <v-col v-for="k in Object.keys(windows)" :key="k" md="3" align-self="center">
-          <v-banner class="text-center">{{ k }}</v-banner>
+        <v-col v-for="k in Object.keys(windows)" :key="k" md="2" align-self="center">
+          <v-banner class="flex-grow-1 text-left"
+          height="60"
+          >{{ k }}
+          </v-banner>
           <v-item>
             <v-card
               :color="windows[k] ? 'white' : 'black'"
               class="d-flex align-center"
-              height="200"
+              width="200"
               @click="openCloseWindow(k)"
             >
                 <div
                   v-if="windows[k]"
                   class="display-3 flex-grow-1 text-center black--text"
                 >
-                  Open
+                  <img src="../../assets/homeicons/WindowOpen.svg">
                 </div>
                 <div
                   v-else
                   class="display-3 flex-grow-1 text-center white--text"
                 >
-                  Closed
+                  <img src="../../assets/homeicons/WindowClosed.svg">
                 </div>
             </v-card>
           </v-item>

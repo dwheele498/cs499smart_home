@@ -1,4 +1,6 @@
 <template>
+<v-img src="../../assets/homeicons/FloorPlan.svg" align-center>
+<v-container fill-height align-center class="my-6">
 <v-row>
         <v-col v-for=" k of Object.keys(doors)" :key="k" cols="12" md="2">
           <v-banner class="flex-grow-1 text-left"
@@ -27,7 +29,8 @@
           </v-item>
         </v-col>
 </v-row>
-
+</v-container>
+  </v-img>
 </template>
 
 <script lang="ts">

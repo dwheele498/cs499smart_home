@@ -28,8 +28,10 @@
       <graph :chartData="waterData.graphData"></graph>
     </div>
     <div v-if="callComplete && tab ===2">
-      <h2>Power Data Here</h2>
       <graph :chartData="powerData.graphData"></graph>
+    </div>
+     <div v-if="callComplete && tab ===3">
+      <graph :chartData="screenData.chartData"></graph>
     </div>
     <v-overlay :value="isLoading">
       <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -42,7 +44,7 @@ import Vue from "vue";
 import { mapState } from "vuex";
 import Graph from "./Graph.vue";
 import TempViewVue from "./TempView.vue";
-import { WeatherCall, WaterCall, PowerCall } from "../../consts";
+import { WeatherCall, WaterCall, PowerCall, ScreenCall } from "../../consts";
 import * as models from "../../services/models";
 import { WeatherFuncModel } from "../../services/models";
 import WaterViewVue from "./WaterView.vue";
@@ -56,6 +58,7 @@ export default Vue.extend({
     weatherData: {} as models.WeatherFuncModel,
     waterData: {} as models.WaterFuncModel,
     powerData: {} as models.PowerFuncModel,
+    screenData: {} as models.PredcitGraphModel,
     isLoading: false,
     month: "",
     callComplete: false,
@@ -73,6 +76,7 @@ export default Vue.extend({
     initialize: WeatherCall,
     waterCall: WaterCall,
     powerCall: PowerCall,
+    screenCall: ScreenCall,
   },
   created() {
     this.value = [] as number[];
@@ -125,6 +129,18 @@ export default Vue.extend({
             this.callComplete = true;
           });
           break;
+      case 3:
+          this.isLoading = true;
+          this.callComplete = false;
+          this.screenCall(this.value, this.labels)
+            .then((screenResult) => {
+              this.screenData = screenResult;
+            })
+            .finally(() => {
+              this.isLoading = false;
+              this.callComplete = true;
+            });
+            break;
     }
   },
   watch: {
@@ -177,6 +193,19 @@ export default Vue.extend({
           this.powerCall(this.dates, this.value, this.labels)
             .then((powerResult) => {
               this.powerData = powerResult;
+            })
+            .finally(() => {
+              this.isLoading = false;
+              this.callComplete = true;
+            });
+            break;
+
+        case 3:
+          this.isLoading = true;
+          this.callComplete = false;
+          this.screenCall(this.value, this.labels)
+            .then((screenResult) => {
+              this.screenData = screenResult;
             })
             .finally(() => {
               this.isLoading = false;

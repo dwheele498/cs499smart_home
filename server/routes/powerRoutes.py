@@ -4,7 +4,7 @@ from flask import request
 from datetime import datetime
 import psycopg2
 from dbGen.dbinitWeather import CreateConnection
-from dbGen.dbinitPower import Prediction
+from dbGen.dbinitPower import Prediction, GenerateScreenStats
 
 
 class PowerSchema(Schema):
@@ -63,3 +63,9 @@ class PowerPrediction(Resource):
         data = data.astype({'Dates': 'str'})
         # data = data.to_json(orient='records')
         return (data.values.tolist()), 200
+
+class ScreenStats(Resource):
+    def get(self):
+        data = GenerateScreenStats()
+        print(data)
+        return({'data':data}),200

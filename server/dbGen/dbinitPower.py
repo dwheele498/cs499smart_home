@@ -182,6 +182,22 @@ def Prediction():
         prediction = m.predict(future)
         return (prediction[['ds', 'yhat']])
 
+def GenerateScreenStats():
+    connection = CreateConnection()
+    total_screens = []
+    screen_data=[]
+    with connection.cursor() as cursor:
+        cursor.execute("select powerdate, livingtv, bedtv from power")
+        data = cursor.fetchall()
+        for i in data:
+            total_screens.append([str(i[0]),i[1]+i[2]])
+        # for i in data:
+        #     screen_data.append(i[0])
+        # df = pd.DataFrame([data])
+
+    return total_screens
+
+
 
 #GeneratePowerDBData()
 #ClearPower()

@@ -3,6 +3,7 @@
     <v-tab>Weather</v-tab>
     <v-tab>Water</v-tab>
     <v-tab>Power</v-tab>
+    <v-tab>ScreenTime</v-tab>
   </v-tabs>
 </template>
 

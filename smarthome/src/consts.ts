@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import * as models from "./services/models";
 import { Api } from "./services/api";
 import { waterApi } from "./services/WaterApi";
-import { ChartDataModel, WaterModel } from "./services/models";
+import { ChartDataModel, PredictionModel, WaterModel } from "./services/models";
 import { powerApi } from "./services/PowerApi";
 
 export const API_KEY = "1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh";
@@ -314,4 +314,34 @@ export async function PowerCall(
   
 
   return powerResult;
+}
+
+export async function ScreenCall(
+  value: number[],
+  label: string[]
+){
+  const wpModel = {} as models.PredcitGraphModel
+  await powerApi.getScreens().then((screen: any)=>{
+    screen.data.data.forEach((s: models.PredictionModel) => {
+        label.push(s[0]);
+        value.push(s[1]*1000/636/.12)
+    });
+  }).finally(()=>{
+    const graphData = {
+      labels: label,
+      datasets: [
+        {
+          label: "Total Screen Time Per Day",
+          data: value,
+          backgroundColor: ["#32a852"],
+          borderColor: "purple",
+        },
+      ],
+    } as models.GraphData;
+    wpModel.labels = label;
+    wpModel.value = value;
+    wpModel.chartData = graphData;
+
+  })
+  return wpModel;
 }

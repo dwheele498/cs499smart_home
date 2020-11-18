@@ -116,6 +116,14 @@ def WeatherData(start:date,end:date):
                     t["tmax"] = math.floor(t["tmax"] * 1.8 + 32)
                 except TypeError as err:
                     print(err)
+            else:
+                try:
+                    t["tavg"] = 0
+                    t["tmin"] = 0
+                    t["tmax"] = 0
+                except TypeError as err:
+                    print(err)
+
         for el in hold:
             print(el["selectedDate"])
             tester = (el["selectedDate"], int(el['tavg']), int(el['tmin']), int(el['tmax']))

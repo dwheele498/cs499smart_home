@@ -13,5 +13,7 @@ getMonth = (start: string, end: string)=>
 
     getPrediction = ()=>
     Api.get<[PredictionModel]>('/monthlypowerprediction')
+
+    getScreens=()=> Api.get<PredictionModel>('/screenstats');
 }
 export const powerApi = new PowerApi();

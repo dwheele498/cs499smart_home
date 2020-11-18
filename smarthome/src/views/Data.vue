@@ -67,6 +67,9 @@
        <div v-if="apiCalled && tab == 2">
         <weather :dates="dates" :tab="tab" :key="dateMin + dateMax"></weather>
       </div>
+       <div v-if="tab == 3">
+        <weather :tab="tab" :key="dateMin + dateMax"></weather>
+      </div>
     </v-container>
   </v-main>
 </template>

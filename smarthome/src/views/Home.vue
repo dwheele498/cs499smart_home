@@ -3,7 +3,7 @@
     <v-content>
     <thermo></thermo>
     <v-tabs grow>
-      <v-tab active-class="active" to="lights">
+      <v-tab ref="lights" active-class="active" to="lights">
         Lights
       </v-tab>
       <v-tab active-class="active" to="doors">
@@ -18,7 +18,6 @@
     </v-tabs-items>
     </v-content>
 
-  <!-- </v-item-group> -->
 </template>
 
 <script lang="ts">

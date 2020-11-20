@@ -34,9 +34,10 @@
             <v-row>
               <v-col v-for="door in doors" :key="door + ' ' + 'power'">
                 <v-switch
-                  @change="firePowerEvent($event)"
+                  @change="openCloseDoor(door)"
                   color="red"
                   :label="door"
+                  
                 ></v-switch>
               </v-col>
             </v-row>
@@ -56,9 +57,10 @@
             <v-row>
               <v-col v-for="light in lights" :key="light + ' ' + 'power'">
                 <v-switch
-                  @change="firePowerEvent($event)"
+                  @change="lightSwitch(light)"
                   color="yellow"
                   :label="light"
+                  :input-value="$store.state.lights[light]"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -81,6 +83,7 @@
                   @change="fireWaterEvent($event, wat)"
                   color="teal darken-4"
                   :label="wat"
+                  v-model="$store.state.water[wat]"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -101,9 +104,10 @@
                 :key="pow + ' ' + 'power'"
               >
                 <v-switch
-                  @change="firePowerEvent($event)"
+                  @change="firePowerEvent($event,pow)"
                   color="amber darken-4"
                   :label="pow"
+                  v-model="$store.state.power[pow]"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -118,7 +122,9 @@
 import Vue from "vue";
 import { ROOMS, POWER_DEVICES, WATER_DEVICES } from "../consts";
 import { Timer } from "easytimer.js";
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { powerApi } from '@/services/PowerApi';
+import store from '@/store';
 export default Vue.extend({
   data: () => ({
     rooms: [] as string[],
@@ -135,12 +141,12 @@ export default Vue.extend({
     for (const [k, v] of Object.entries(this.$store.state.doors)) {
       this.doors.push(k);
     }
-    for (const k of Object.entries(this.$store.state.lights)) {
+    for (const [k,v] of Object.entries(this.$store.state.lights)) {
       this.lights.push(k);
     }
   },
   methods: {
-    ...mapMutations(["addPower", "addWater"]),
+    ...mapMutations(["addPower", "addWater","powerSwitch","openCloseDoor","onOffLight"]),
     getTime(): number {
       console.log("Sending time");
       const sp = this.timer
@@ -151,12 +157,27 @@ export default Vue.extend({
       return Number.parseInt(sp[2]);
     },
     firePowerEvent(event: any, name: string) {
-      console.log(event);
+      console.log(name);
       if (event === true) {
         this.timer.start();
+        this.powerSwitch(name);
       } else {
+        this.powerSwitch(name);
         this.timer.pause();
         this.addPower([name, this.getTime()]);
+        const pow = this.$store.state.power["LiveTv"].amt;
+        name = name.toLowerCase();
+        switch(name){
+          case "livetv":
+            powerApi.sendPower('livingtv',pow);
+            break;
+          case "bathexhaust":
+            powerApi.sendPower('exhaust',pow);
+            break;
+          default:
+            powerApi.sendPower(name,pow);
+            break;
+        }
         this.timer.stop();
       }
     },
@@ -170,6 +191,10 @@ export default Vue.extend({
         this.timer.stop();
       }
     },
+    lightSwitch(name: string){
+      console.log(name);
+      this.onOffLight(name);
+    }
   },
 });
 </script>

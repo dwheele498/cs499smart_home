@@ -83,7 +83,7 @@
                   @change="fireWaterEvent($event, wat)"
                   color="teal darken-4"
                   :label="wat"
-                  v-model="$store.state.water[wat]"
+                  :input-value="$store.state.water[wat].on"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -107,7 +107,7 @@
                   @change="firePowerEvent($event,pow)"
                   color="amber darken-4"
                   :label="pow"
-                  v-model="$store.state.power[pow]"
+                  :input-value="$store.state.power[pow].on"
                 ></v-switch>
               </v-col>
             </v-row>
@@ -125,6 +125,7 @@ import { Timer } from "easytimer.js";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import { powerApi } from '@/services/PowerApi';
 import store from '@/store';
+import { waterApi } from '@/services/WaterApi';
 export default Vue.extend({
   data: () => ({
     rooms: [] as string[],
@@ -137,6 +138,7 @@ export default Vue.extend({
   created() {
     this.rooms = ROOMS;
     this.power = POWER_DEVICES;
+    console.log(this.power)
     this.water = WATER_DEVICES;
     for (const [k, v] of Object.entries(this.$store.state.doors)) {
       this.doors.push(k);
@@ -146,7 +148,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapMutations(["addPower", "addWater","powerSwitch","openCloseDoor","onOffLight"]),
+    ...mapMutations(["addPower", "addWater","powerSwitch","waterSwitch","openCloseDoor","onOffLight"]),
     getTime(): number {
       console.log("Sending time");
       const sp = this.timer
@@ -165,7 +167,7 @@ export default Vue.extend({
         this.powerSwitch(name);
         this.timer.pause();
         this.addPower([name, this.getTime()]);
-        const pow = this.$store.state.power["LiveTv"].amt;
+        const pow = this.$store.state.power[name].amt;
         name = name.toLowerCase();
         switch(name){
           case "livetv":
@@ -185,9 +187,14 @@ export default Vue.extend({
       console.log(name);
       if (event === true) {
         this.timer.start();
+        this.waterSwitch(name);
       } else {
         this.timer.pause();
+        this.waterSwitch(name);
         this.addWater([name, this.getTime()]);
+        const wat = this.$store.state.water[name].amt;
+        name = name.toLowerCase();
+        waterApi.sendWater(name,wat);
         this.timer.stop();
       }
     },

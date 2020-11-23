@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 900 600" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:1.5;">
-    <g id="Frame">
+<svg width="100%" height="100%" viewBox="0 0 900 475" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:1.5;">
+    <g id="Frame" transform="matrix(1,0,0,1,0,-80.5)">
         <path d="M890.909,544.05L13.502,544.05L13.502,212.142L208.456,212.142L208.456,94.714L890.909,94.714L890.909,544.05Z" style="fill:white;stroke:white;stroke-width:20px;"/>
     </g>
-    <g id="Outer" transform="matrix(0.974897,0,0,0.969995,13.5023,-37.9466)">
+    <g id="Outer" transform="matrix(0.974897,0,0,0.969995,13.5023,-118.447)">
         <path d="M205.147,257.825L0,257.825L0,600L294.766,600" style="fill:none;stroke:black;stroke-width:10.28px;stroke-linecap:butt;stroke-linejoin:round;"/>
         <g transform="matrix(1.02575,0,0,1.03093,-13.85,-11.3953)">
             <path d="M300.869,593.05L553.908,593.05" style="fill:none;stroke:black;stroke-width:10px;stroke-linecap:butt;stroke-linejoin:round;"/>
@@ -19,7 +19,7 @@
             <path d="M890.909,544.05L890.909,94.714" style="fill:none;stroke:black;stroke-width:10px;stroke-linecap:butt;stroke-linejoin:round;"/>
         </g>
     </g>
-    <g id="Rooms" transform="matrix(0.842505,0,0,0.748893,48.8569,94.7144)">
+    <g id="Rooms" transform="matrix(0.842505,0,0,0.748893,48.8569,14.2144)">
         <g id="BTH-2" serif:id="BTH 2" transform="matrix(-0.521429,0,0,0.552227,1016.61,-204.305)">
             <rect x="602.12" y="369.965" width="197.88" height="230.035" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:24.86px;stroke-linecap:butt;stroke-linejoin:round;"/>
         </g>
@@ -49,8 +49,23 @@
         <g id="Laundry" transform="matrix(1.18694,0,0,1.3353,-57.9901,-191.902)">
             <path d="M303.835,261.142L208.456,261.142L209.559,143.714L303.835,143.714" style="fill:none;stroke:black;stroke-width:10px;stroke-linecap:butt;stroke-linejoin:round;"/>
         </g>
+        <g transform="matrix(1.18694,0,0,1.3353,343.921,-13.8833)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Master BR</text>
+        </g>
+        <g transform="matrix(1.18694,0,0,1.3353,216.876,347.683)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Kid BR 1</text>
+        </g>
+        <g transform="matrix(1.18694,0,0,1.3353,412.642,347.683)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Kid BR 2</text>
+        </g>
+        <g transform="matrix(1.18694,0,0,1.3353,172.235,-77.3992)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Bath 1</text>
+        </g>
+        <g transform="matrix(1.18694,0,0,1.3353,171.22,55.8237)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Bath 2</text>
+        </g>
     </g>
-    <g id="Windows" transform="matrix(1,0,0,1,0,-49)">
+    <g id="Windows" transform="matrix(1,0,0,1,0,-129.5)">
         <g transform="matrix(1,0,0,1,1.78424,-215.373)">
             <rect x="574.632" y="353.493" width="41.912" height="9.926" style="fill:white;stroke:black;stroke-width:3.2px;stroke-linecap:butt;stroke-linejoin:round;"/>
         </g>
@@ -88,7 +103,7 @@
             <rect x="574.632" y="353.493" width="41.912" height="9.926" style="fill:white;stroke:black;stroke-width:3.2px;stroke-linecap:butt;stroke-linejoin:round;"/>
         </g>
     </g>
-    <g id="Doors" transform="matrix(1,0,0,1,0,-49)">
+    <g id="Doors" transform="matrix(1,0,0,1,0,-129.5)">
         <g id="Door" transform="matrix(1,0,0,1,64.4208,252.121)">
             <rect x="511.996" y="77.757" width="41.912" height="8.824" style="stroke:white;stroke-width:4px;stroke-linecap:butt;stroke-linejoin:round;"/>
             <g transform="matrix(0.840591,0.225236,-0.258819,0.965926,105.74,-112.793)">
@@ -136,6 +151,37 @@
             <g transform="matrix(0.840591,0.225236,-0.258819,0.965926,105.74,-112.793)">
                 <path d="M511.996,86.581L553.908,86.581" style="fill:none;stroke:rgb(6,0,0);stroke-width:3.41px;stroke-linecap:butt;stroke-linejoin:round;"/>
             </g>
+        </g>
+    </g>
+    <g id="Names">
+        <g transform="matrix(1,0,0,1,19.2857,28.4694)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Kitchen</text>
+        </g>
+        <g transform="matrix(1,0,0,1,-257.143,181.837)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Garage</text>
+        </g>
+        <g transform="matrix(1,0,0,1,-7.43891,244.265)">
+            <text x="369.184px" y="113.98px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:24px;">Living Room</text>
+        </g>
+    </g>
+    <g id="Lamps">
+        <g transform="matrix(1.61319,0,0,1.61319,-527.811,-68.722)">
+            <circle cx="866.253" cy="74.257" r="7.114" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:1.24px;"/>
+        </g>
+        <g transform="matrix(1.61319,0,0,1.61319,-527.811,52.4004)">
+            <circle cx="866.253" cy="74.257" r="7.114" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:1.24px;"/>
+        </g>
+        <g transform="matrix(1.61319,0,0,1.61319,-819.444,292.196)">
+            <circle cx="866.253" cy="74.257" r="7.114" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:1.24px;"/>
+        </g>
+        <g transform="matrix(1.61319,0,0,1.61319,-643.526,292.196)">
+            <circle cx="866.253" cy="74.257" r="7.114" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:1.24px;"/>
+        </g>
+        <g transform="matrix(1.61319,0,0,1.61319,-1070.57,315.149)">
+            <circle cx="866.253" cy="74.257" r="7.114" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:1.24px;"/>
+        </g>
+        <g transform="matrix(1.61319,0,0,1.61319,-1070.57,164.597)">
+            <circle cx="866.253" cy="74.257" r="7.114" style="fill:rgb(235,235,235);fill-opacity:0;stroke:black;stroke-width:1.24px;"/>
         </g>
     </g>
 </svg>

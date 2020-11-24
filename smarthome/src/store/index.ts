@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex, { MutationTree } from "vuex";
+import Vuex, { GetterTree, MutationTree } from "vuex";
 import { UpdateDbModel } from "../services/models";
 
 Vue.use(Vuex);
@@ -24,10 +24,28 @@ const mutations: MutationTree<RootState> = {
       }
     }
   },
+  powerSwitch(state, payload: string) {
+    for (const [k, v] of Object.entries(state.power)) {
+      if (k == payload) {
+        state.power[k].on
+          ? (state.power[k].on = false)
+          : (state.power[k].on = true);
+      }
+    }
+  },
   addWater(state, payload: [string, number]) {
     for (const [k, v] of Object.entries(state.water)) {
       if (k == payload[0]) {
         state.water[k].amt += payload[1];
+      }
+    }
+  },
+  waterSwitch(state, payload: string) {
+    for (const [k, v] of Object.entries(state.water)) {
+      if (k == payload) {
+        state.water[k].on
+          ? (state.water[k].on = false)
+          : (state.water[k].on = true);
       }
     }
   },
@@ -42,9 +60,9 @@ const mutations: MutationTree<RootState> = {
   },
   onOffLight(state, payload: string) {
     for (const [k, v] of Object.entries(state.lights)) {
-      if (k === payload) {
+      if (k == payload) {
         console.log(k + " " + v);
-        state.lights[k] = !v;
+        state.lights[k] ? (state.lights[k] = false) : (state.lights[k] = true);
         console.log(k + " " + state.lights[k]);
       }
     }
@@ -53,7 +71,9 @@ const mutations: MutationTree<RootState> = {
     for (const [k, v] of Object.entries(state.windows)) {
       if (k === payload) {
         console.log(k + " " + v);
-        state.windows[k] = !v;
+        state.windows[k]
+          ? (state.windows[k] = false)
+          : (state.windows[k] = true);
         console.log(k + " " + state.windows[k]);
       }
     }
@@ -69,14 +89,17 @@ const store = new Vuex.Store<RootState>({
       Oven: { on: false, amt: 0 },
       BedTv: { on: false, amt: 0 },
       LiveTv: { on: false, amt: 0 },
-      "Dish Washer": { on: false, amt: 0 },
-      "Washing Machine": { on: false, amt: 0 },
+      DishWasher: { on: false, amt: 0 },
+      ClothesWasher: { on: false, amt: 0 },
       Dryer: { on: false, amt: 0 },
+      HVAC: { on: false, amt: 0 },
+      BathExhaust: { on: false, amt: 0 },
+      Refrigerator:{on:false, amt:0}
     },
 
     water: {
-      "Washing Machine": { on: false, amt: 0 },
-      "Dish Washer": { on: false, amt: 0 },
+      ClothesWasher: { on: false, amt: 0 },
+      DishWasher: { on: false, amt: 0 },
       Shower: { on: false, amt: 0 },
       Bath: { on: false, amt: 0 },
     },

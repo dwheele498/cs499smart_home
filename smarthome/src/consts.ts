@@ -18,9 +18,9 @@ export const ROOMS = [
   "Garage",
   "Bathroom",
 ];
-export const  POWER_DEVICES = ['Living Room TV','Bedroom TV','HVAC','Refrigerator','Microwave','Water Heater','Stove','Over',
-'Dishwasher','Washing Machine', 'Dryer','Bath Exhaust']
-export const WATER_DEVICES = ['Bath','Shower','Dishwasher','Washing Machine',]
+export const  POWER_DEVICES = ['LiveTv','BedTv','HVAC','Refrigerator','Microwave','Stove','Oven',
+'DishWasher','ClothesWasher', 'Dryer','BathExhaust']
+export const WATER_DEVICES = ['Bath','Shower','DishWasher','ClothesWasher',]
 export enum MONTHS {
   January = 1,
   February = 2,

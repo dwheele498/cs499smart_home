@@ -72,6 +72,7 @@ const store = new Vuex.Store<RootState>({
       "Dish Washer": { on: false, amt: 0 },
       "Washing Machine": { on: false, amt: 0 },
       Dryer: { on: false, amt: 0 },
+      Hvac: { on: false, amt: 68}
     },
 
     water: {

@@ -8,7 +8,7 @@ import { waterApi } from "./services/WaterApi";
 import { ChartDataModel, PredictionModel, WaterModel } from "./services/models";
 import { powerApi } from "./services/PowerApi";
 
-export const API_KEY = "1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh";
+export const API_KEY = '1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh';
 export const WEATHER_STATS = { lat: 33.543682, lon: -86.779633 };
 export const ROOMS = [
   "Living Room",
@@ -18,9 +18,20 @@ export const ROOMS = [
   "Garage",
   "Bathroom",
 ];
-export const  POWER_DEVICES = ['LiveTv','BedTv','HVAC','Refrigerator','Microwave','Stove','Oven',
-'DishWasher','ClothesWasher', 'Dryer','BathExhaust']
-export const WATER_DEVICES = ['Bath','Shower','DishWasher','ClothesWasher',]
+export const POWER_DEVICES = [
+  "LiveTv",
+  "BedTv",
+  "HVAC",
+  "Refrigerator",
+  "Microwave",
+  "Stove",
+  "Oven",
+  "DishWasher",
+  "ClothesWasher",
+  "Dryer",
+  "BathExhaust",
+];
+export const WATER_DEVICES = ["Bath", "Shower", "DishWasher", "ClothesWasher"];
 export enum MONTHS {
   January = 1,
   February = 2,
@@ -117,8 +128,7 @@ export async function WaterCall(
         clothes.push(water.clotheswasher);
         bath.push(water.bath);
         shower.push(water.shower);
-        const dt = DateTime.fromISO(water.date)
-          .toFormat("M/d");
+        const dt = DateTime.fromISO(water.date).toFormat("M/d");
         label.push(dt);
       });
     })
@@ -154,12 +164,10 @@ export async function WaterCall(
         backgroundColor: [],
         borderColor: "orange",
       };
-    const graphData = {
+      const graphData = {
         labels: label,
-        datasets: [
-  
-        ],
-    };
+        datasets: [],
+      };
 
       waterResult.labels = label;
       waterResult.value = value;
@@ -170,10 +178,10 @@ export async function WaterCall(
       waterResult.graphData.datasets.push(graphData3);
       waterResult.graphData.datasets.push(graphData4);
       console.log(waterResult);
-        waterResult.bath = bath;
-        waterResult.shower = shower;
-        waterResult.clothesWasher = clothes;
-        waterResult.dishWasher = dish;
+      waterResult.bath = bath;
+      waterResult.shower = shower;
+      waterResult.clothesWasher = clothes;
+      waterResult.dishWasher = dish;
     });
 
   return waterResult;
@@ -187,22 +195,30 @@ export async function PowerCall(
   store.commit("resetIndex");
   const start = dates[0];
   const end = dates[1];
-   const oven =[] as number[];
-  const microwave = [] as number[]
-   const bedtv=[] as number[]
-  const livingtv = [] as number[]
-  const stove = [] as number[]
-  const dishwasher = [] as number[]
- const hvac = [] as number[]
-  const clotheswasher = [] as number[]
- const exhaust = [] as number[]
+  const oven = [] as number[];
+  const microwave = [] as number[];
+  const bedtv = [] as number[];
+  const livingtv = [] as number[];
+  const stove = [] as number[];
+  const dishwasher = [] as number[];
+  const hvac = [] as number[];
+  const clotheswasher = [] as number[];
+  const exhaust = [] as number[];
   const powerResult = {} as models.PowerFuncModel;
   await powerApi
     .getMonth(start, end)
     .then((res: any) => {
       res.data.start.forEach((power: models.PowerModel) => {
         const total =
-          power.livingtv + power.bedtv + power.clotheswasher + power.dishwasher + power.exhaust + power.hvac + power.microwave + power.oven + power.stove;
+          power.livingtv +
+          power.bedtv +
+          power.clotheswasher +
+          power.dishwasher +
+          power.exhaust +
+          power.hvac +
+          power.microwave +
+          power.oven +
+          power.stove;
         value.push(total);
         dishwasher.push(power.dishwasher);
         clotheswasher.push(power.clotheswasher);
@@ -280,12 +296,10 @@ export async function PowerCall(
         backgroundColor: [],
         borderColor: "grey",
       };
-    const graphData = {
+      const graphData = {
         labels: label,
-        datasets: [
-  
-        ],
-    };
+        datasets: [],
+      };
 
       powerResult.labels = label;
       powerResult.value = value;
@@ -301,47 +315,45 @@ export async function PowerCall(
       powerResult.graphData.datasets.push(graphData8);
       powerResult.graphData.datasets.push(graphData9);
       console.log(powerResult);
-        powerResult.exhaust = exhaust;
-        powerResult.stove = stove;
-        powerResult.clotheswasher = clotheswasher;
-        powerResult.dishwasher = dishwasher;
-        powerResult.bedtv = bedtv;
-        powerResult.hvac = hvac;
-        powerResult.livingtv = livingtv;
-        powerResult.microwave = microwave;
-        powerResult.oven = oven;
+      powerResult.exhaust = exhaust;
+      powerResult.stove = stove;
+      powerResult.clotheswasher = clotheswasher;
+      powerResult.dishwasher = dishwasher;
+      powerResult.bedtv = bedtv;
+      powerResult.hvac = hvac;
+      powerResult.livingtv = livingtv;
+      powerResult.microwave = microwave;
+      powerResult.oven = oven;
     });
-  
 
   return powerResult;
 }
 
-export async function ScreenCall(
-  value: number[],
-  label: string[]
-){
-  const wpModel = {} as models.PredcitGraphModel
-  await powerApi.getScreens().then((screen: any)=>{
-    screen.data.data.forEach((s: models.PredictionModel) => {
+export async function ScreenCall(value: number[], label: string[]) {
+  const wpModel = {} as models.PredcitGraphModel;
+  await powerApi
+    .getScreens()
+    .then((screen: any) => {
+      screen.data.data.forEach((s: models.PredictionModel) => {
         label.push(s[0]);
-        value.push(s[1]*1000/636/.12)
+        value.push((s[1] * 1000) / 636 / 0.12);
+      });
+    })
+    .finally(() => {
+      const graphData = {
+        labels: label,
+        datasets: [
+          {
+            label: "Total Screen Time Per Day",
+            data: value,
+            backgroundColor: ["#32a852"],
+            borderColor: "purple",
+          },
+        ],
+      } as models.GraphData;
+      wpModel.labels = label;
+      wpModel.value = value;
+      wpModel.chartData = graphData;
     });
-  }).finally(()=>{
-    const graphData = {
-      labels: label,
-      datasets: [
-        {
-          label: "Total Screen Time Per Day",
-          data: value,
-          backgroundColor: ["#32a852"],
-          borderColor: "purple",
-        },
-      ],
-    } as models.GraphData;
-    wpModel.labels = label;
-    wpModel.value = value;
-    wpModel.chartData = graphData;
-
-  })
   return wpModel;
 }

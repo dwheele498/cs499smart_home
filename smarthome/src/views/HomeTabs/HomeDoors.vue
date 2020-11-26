@@ -4,13 +4,13 @@
           <v-banner class="text-center">{{ k }}</v-banner>
           <v-item>
             <v-card
-              :color="doors[k] ? 'white' : 'black'"
+              :color="doors[k].on ? 'white' : 'black'"
               class="d-flex align-center"
               height="200"
-              @click="openCloseDoor(k)"
+              @click="openCloseDoor([k,15])"
             >
                 <div
-                  v-if="doors[k]"
+                  v-if="doors[k].on"
                   class="display-3 flex-grow-1 text-center black--text"
                 >
                   On
@@ -32,15 +32,17 @@
 import Vue from 'vue'
 import { mapMutations, mapState } from 'vuex';
 import {ROOMS} from '../../consts';
+import {Timer} from "easytimer.js";
 export default Vue.extend({
       data: () => ({
         rooms: ROOMS,
+        timer: new Timer(),
   }),
   computed:{
     ...mapState(['doors'])
   },
   methods:{
-    ...mapMutations(['openCloseDoor'])
+    ...mapMutations(['openCloseDoor']),
   }
 })
 </script>

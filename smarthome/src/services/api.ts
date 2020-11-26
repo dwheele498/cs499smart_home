@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { API_KEY } from "../consts";
+import { API_KEY, API_KEY_BACKUP } from "../consts";
 
 export const Api: AxiosInstance = axios.create({
   baseURL: "http://localhost:5000",

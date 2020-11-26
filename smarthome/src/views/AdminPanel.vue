@@ -34,7 +34,7 @@
             <v-row>
               <v-col v-for="door in doors" :key="door + ' ' + 'power'">
                 <v-switch
-                  @change="firePowerEvent($event)"
+                  @change="fireDoorEvent($event)"
                   color="red"
                   :label="door"
                 ></v-switch>
@@ -170,6 +170,16 @@ export default Vue.extend({
         this.timer.stop();
       }
     },
+    fireDoorEvent(event: any){
+      console.log(name);
+      if (event === true) {
+        this.timer.start();
+      } else {
+        this.timer.pause();
+        this.addPower(['Hvac', this.getTime()]);
+        this.timer.stop();
+      }
+    }
   },
 });
 </script>

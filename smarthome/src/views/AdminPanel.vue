@@ -9,26 +9,26 @@
           <v-expansion-panel-content>
             <v-row class="justify-center">
               <v-col>
-                <v-radio-group>
+                <v-radio-group label="Minutes">
                   <v-radio
                     @change="radioPick(5)"
                     color="success"
                     label="5"
-                    value="5"
+                    value="120"
                   >
                   </v-radio>
                   <v-radio
                     @change="radioPick(10)"
                     color="success"
                     label="10"
-                    value="10"
+                    value="240"
                   >
                   </v-radio>
                   <v-radio
                     @change="radioPick(15)"
                     color="success"
                     label="15"
-                    value="15"
+                    value="360"
                   >
                   </v-radio>
                 </v-radio-group>
@@ -210,7 +210,8 @@ export default Vue.extend({
       "onOffLight",
     ]),
     radioPick(event: any) {
-      this.radio = Number.parseInt(event);
+      console.log(event);
+      this.radio = Number.parseInt(event) * 60;
     },
     manualSubmit(){
       this.addPower([this.appliance,this.radio]);

@@ -1,7 +1,7 @@
 <template>
     <v-container fill-height align-center class="my-6">
       <v-flex min-width="600px">
-        <v-img src="../../assets/homeicons/FloorPlan.svg"
+        <v-img src="../../assets/homeicons/FloorPlanDoor.svg"
         width="600px"
         max-width="100%"
         @click="doorSwitch($event)"

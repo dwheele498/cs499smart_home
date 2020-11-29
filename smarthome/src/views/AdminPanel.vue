@@ -34,10 +34,13 @@
                 </v-radio-group>
               </v-col>
               <v-col>
-                <v-select :items="power" v-model="appliance" clearable label="Appliance Name"></v-select>
-                <v-btn @click="manualSubmit()" color="success" rounded>Submit</v-btn>
+                <v-select :items="power" v-model="appliance" clearable label="Electrical Appliance Name"></v-select>
+              </v-col>
+              <v-col>
+                <v-select :items="water" v-model="appliance" clearable label="Water Appliance Name"></v-select>
               </v-col>
             </v-row>
+             <v-btn right @click="manualSubmit($event)" id=water color="success" rounded>Submit</v-btn>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -214,11 +217,16 @@ export default Vue.extend({
       this.radio = Number.parseInt(event) * 60;
     },
     manualSubmit(){
-      this.addPower([this.appliance,this.radio]);
+      this.power.forEach((p)=>{if(p === this.appliance){
+        this.addPower([this.appliance,this.radio]);
+      }})
+      this.water.forEach((w)=>{
+        if(w===this.appliance){
+          this.addWater([this.appliance,this.radio]);
+        }
+      })
       this.submit = true;
       this.appliance = '';
-
-
     },
     getTime(): number {
       console.log("Sending time");

@@ -1,12 +1,11 @@
 <template>
   <v-container fill-height align-center class="my-6">
     <v-flex min-width="600px">
-        <v-img src="../../assets/homeicons/FloorPlanWindow.svg"
+        <img src="../../assets/homeicons/FloorPlanWindow.svg"
         width="600px"
         max-width="100%"
         @click="windowSwitch($event)"
         >
-        </v-img>
       </v-flex>
     <v-row>
       <v-col v-for="k in Object.keys(windows)" :key="k" md="2" align-self="center">

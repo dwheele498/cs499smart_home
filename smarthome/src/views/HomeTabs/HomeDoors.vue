@@ -1,12 +1,12 @@
 <template>
     <v-container fill-height align-center class="my-6">
       <v-flex min-width="600px">
-        <v-img src="../../assets/homeicons/FloorPlanDoor.svg"
+        <img src="../../assets/homeicons/FloorPlanDoor.svg"
         width="600px"
         max-width="100%"
         @click="doorSwitch($event)"
-        >
-        </v-img>
+        />
+
       </v-flex>
       <v-row>
         <v-col v-for=" k of Object.keys(doors)" :key="k" cols="12" md="2">

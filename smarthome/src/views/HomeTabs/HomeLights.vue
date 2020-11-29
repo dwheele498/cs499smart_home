@@ -1,12 +1,11 @@
 <template>
     <v-container>
       <v-flex min-width="600px">
-        <v-img src="../../assets/homeicons/FloorPlanLight.svg"
+        <img src="../../assets/homeicons/FloorPlanLight.svg"
         width="600px"
         max-width="100%"
         @click="lightSwitch($event)"
         >
-        </v-img>
       </v-flex>
       <v-row>
       <v-col v-for="k in Object.keys(lights)" :key="k" md="2">

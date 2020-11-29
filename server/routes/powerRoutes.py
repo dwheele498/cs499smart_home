@@ -3,9 +3,9 @@ from marshmallow import Schema, fields, INCLUDE
 from flask import request
 from datetime import datetime
 import psycopg2
+import json
 from dbGen.dbinitWeather import CreateConnection
 from dbGen.dbinitPower import Prediction, GenerateScreenStats
-
 
 class PowerSchema(Schema):
     powerdate = fields.String()
@@ -55,6 +55,17 @@ class PowerGetMonthly(Resource):
                                                   'stove':i[5],'dishwasher':i[6],'clotheswasher':i[7],'hvac':i[8],'exhaust':i[9]},unknown=INCLUDE))
             print(holderStart)
             return {'start': holderStart}, 200
+
+    def post(self):
+        data = powerget.load(request.args)
+        connection = CreateConnection()
+        with connection.cursor() as cursor:
+            date = data.get('powerdate')
+            for item in ['livingtv', 'bedtv', 'oven', 'microwave', 'stove', 'dishwasger', 'clotheswasher', 'hvac', 'exhaust']:
+                if data.get(item) is not None:
+                    cursor.execute('update power set ' + str(item) + ' = ' + str(item) + ' + ' + str(data.get(item)) + ' where powerdate::date = %s', [date])
+                    connection.commit()
+
 
 class PowerPrediction(Resource):
     def get(self):

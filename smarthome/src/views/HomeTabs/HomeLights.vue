@@ -1,7 +1,7 @@
 <template>
     <v-container>
       <v-flex min-width="600px">
-        <img src="../../assets/homeicons/FloorPlan.svg"
+        <img src="../../assets/homeicons/FloorPlanLight.svg"
         width="600px"
         max-width="100%"
         @click="lightSwitch($event)"

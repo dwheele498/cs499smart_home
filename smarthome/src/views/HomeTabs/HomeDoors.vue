@@ -1,5 +1,5 @@
 <template>
-    <v-container fill-height align-center class="my-6">
+    <v-container fill-height align-center>
       <v-flex min-width="600px">
         <img src="../../assets/homeicons/FloorPlanDoor.svg"
         width="600px"
@@ -20,6 +20,7 @@
               width="200"
               @click="openCloseDoor(k)"
             >
+            <div v-if="doors[k]">
               <img src="../../assets/homeicons/DoorOpen.svg" />
             </div>
             <div v-else class="display-3 flex-grow-1 text-center white--text">

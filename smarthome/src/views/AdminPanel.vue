@@ -79,7 +79,7 @@
             <v-row>
               <v-col v-for="door in doors" :key="door + ' ' + 'power'">
                 <v-switch
-                  @change="openCloseDoor(door)"
+                  @change="fireDoorEvent($event,door)"
                   color="red"
                   :label="door"
                 ></v-switch>
@@ -159,7 +159,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-container>
-    <v-snackbar v-model="submit">{{snakMessage}} <template v-slot:action="{ attrs }">
+    <v-snackbar v-model="submit">{{snackMessage}} <template v-slot:action="{ attrs }">
         <v-btn
           color="green"
           text
@@ -278,6 +278,16 @@ export default Vue.extend({
         const wat = this.$store.state.water[name].amt;
         name = name.toLowerCase();
         waterApi.sendWater(name, wat);
+        this.timer.stop();
+      }
+    },
+    fireDoorEvent(event: any, name: string) {
+      console.log(name);
+      if (event === true) {
+        this.timer.start();
+      } else {
+        this.timer.pause();
+        this.openCloseDoor([name, this.getTime()]);
         this.timer.stop();
       }
     },

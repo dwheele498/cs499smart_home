@@ -8,9 +8,12 @@ export interface RootState {
   index?: number;
   power: Record<string, UpdateDbModel>;
   water: Record<string, UpdateDbModel>;
-  doors: Record<string, boolean>;
+  doors: Record<string, UpdateDbModel>;
   lights: Record<string, boolean>;
   windows: Record<string, boolean>;
+  thermo: number;
+  outSideTemp: number;
+
 }
 
 const mutations: MutationTree<RootState> = {
@@ -49,11 +52,13 @@ const mutations: MutationTree<RootState> = {
       }
     }
   },
-  openCloseDoor(state, payload: string) {
-    for (const [k, v] of Object.entries(state.doors)) {
-      if (k === payload) {
+  openCloseDoor(state, payload: [string, number]) {
+  for (const [k, v] of Object.entries(state.doors)) {
+      if (k === payload[0]) {
         console.log(k + " " + v);
-        state.doors[k] = !v;
+        state.doors[k].on = !state.doors[k].on;
+       state.doors[k].amt += payload[1];
+
         console.log(k + " " + state.doors[k]);
       }
     }
@@ -78,6 +83,13 @@ const mutations: MutationTree<RootState> = {
       }
     }
   },
+  setOutsideTemp(state, payload: number) {
+    state.outSideTemp = payload;
+  },
+  setThermo(state, payload: number) {
+    state.thermo += payload;
+  },
+
 };
 
 const store = new Vuex.Store<RootState>({
@@ -103,16 +115,17 @@ const store = new Vuex.Store<RootState>({
       Bath: { on: false, amt: 0 },
     },
     doors: {
-      "Master Bedroom Door": false,
-      "Kid's Bedroom 1 Door": false,
-      "Kid's Bedroom 2 Door": false,
-      "Garage Door 1": false,
-      "Garage Door 2": false,
-      "Front Door": false,
-      "Back Door": false,
-      "House to Garage Door": false,
-      "Bathroom Door 1": false,
-      "Bathroom Door 2": false,
+      "Master Bedroom Door": { on: false, amt: 0 },
+      "Kid's Bedroom 1 Door": { on: false, amt: 0 },
+      "Kid's Bedroom 2 Door": { on: false, amt: 0 },
+      "Garage Door 1": { on: false, amt: 0 },
+      "Garage Door 2": { on: false, amt: 0 },
+      "Front Door": { on: false, amt: 0 },
+      "Back Door": { on: false, amt: 0 },
+      "House to Garage Door": { on: false, amt: 0 },
+      "Bathroom Door 1": { on: false, amt: 0 },
+      "Bathroom Door 2": { on: false, amt: 0 },
+
     },
     lights: {
       "Master Bedroom Overhead": false,
@@ -144,6 +157,9 @@ const store = new Vuex.Store<RootState>({
       "Kitchen Window 1": false,
       "Kitchen Window 2": false,
     },
+    thermo: 68,
+    outSideTemp: 0,
+
   },
   mutations: mutations,
 });

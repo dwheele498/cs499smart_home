@@ -3,7 +3,6 @@ from marshmallow import Schema, fields, INCLUDE
 from flask import request
 import psycopg2
 from datetime import datetime
-import json
 from dbGen.dbinitWeather import CreateConnection, WeatherData, Prediction
 
 

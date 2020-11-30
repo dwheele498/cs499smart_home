@@ -1,6 +1,7 @@
 <template>
   <v-main>
     <v-container fluid>
+      <v-btn @click="save()">Save</v-btn>
       <v-expansion-panels accordion>
         <v-expansion-panel>
           <v-expansion-panel-header>
@@ -122,8 +123,10 @@
 import Vue from "vue";
 import { ROOMS, POWER_DEVICES, WATER_DEVICES } from "../consts";
 import { Timer } from "easytimer.js";
+import {UpdateDbModel} from '../services/models/UpdateDbModel';
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import { powerApi } from '@/services/PowerApi';
+
 import store from '@/store';
 import { waterApi } from '@/services/WaterApi';
 export default Vue.extend({
@@ -138,7 +141,6 @@ export default Vue.extend({
   created() {
     this.rooms = ROOMS;
     this.power = POWER_DEVICES;
-    console.log(this.power)
     this.water = WATER_DEVICES;
     for (const [k, v] of Object.entries(this.$store.state.doors)) {
       this.doors.push(k);
@@ -170,10 +172,10 @@ export default Vue.extend({
         const pow = this.$store.state.power[name].amt;
         name = name.toLowerCase();
         switch(name){
-          case "livetv":
+          case "livingtv":
             powerApi.sendPower('livingtv',pow);
             break;
-          case "bathexhaust":
+          case "exhaust":
             powerApi.sendPower('exhaust',pow);
             break;
           default:
@@ -201,6 +203,15 @@ export default Vue.extend({
     lightSwitch(name: string){
       console.log(name);
       this.onOffLight(name);
+    },
+    async save(){
+      const powerHold = []
+      Object.entries(this.$store.state.power).forEach((k)=>{
+        powerHold.push([k[0].toLowerCase(),k[1].amt]);
+        // console.log(v);
+      })
+
+      await powerApi.sendPower(powerHold).then((res: any)=>{console.log(res)});
     }
   },
 });

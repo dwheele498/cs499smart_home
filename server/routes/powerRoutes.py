@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from marshmallow import Schema, fields, INCLUDE
 from flask import request
-from datetime import datetime
+from datetime import datetime,date
 import psycopg2
 import json
 from dbGen.dbinitWeather import CreateConnection
@@ -25,6 +25,7 @@ class PowerRequestSchema(Schema):
     end: fields.Date()
 
 
+
 powerget = PowerSchema()
 
 powerrequest = PowerRequestSchema()
@@ -41,13 +42,6 @@ class PowerGetMonthly(Resource):
                            (start,datetime.today()))
             # holderEnd = []
             resultsStart = cursor.fetchall()
-            # if start[1] != end[1]:
-            #     cursor.execute('select month,day,dishwasher,clotheswasher,shower,bath from water_usage where month=%s and day<=%s',
-            #                    (end[1], end[2]))
-            #     resultsEnd = cursor.fetchall()
-
-                # for i in resultsEnd:
-                #     holderEnd.append((waterGet.load({'month':i[0],'day':i[1],'dishwasher':i[2],'clotheswasher':i[3],'shower':i[4],'bath':i[5]},unknown=INCLUDE)))
             holderStart = []
             for i in resultsStart:
                 print(i)
@@ -57,14 +51,19 @@ class PowerGetMonthly(Resource):
             return {'start': holderStart}, 200
 
     def post(self):
-        data = powerget.load(request.args)
+        data = request.json
+        print('data')
+        data = data['power']
+        print(data)
         connection = CreateConnection()
         with connection.cursor() as cursor:
-            date = data.get('powerdate')
-            for item in ['livingtv', 'bedtv', 'oven', 'microwave', 'stove', 'dishwasger', 'clotheswasher', 'hvac', 'exhaust']:
-                if data.get(item) is not None:
-                    cursor.execute('update power set ' + str(item) + ' = ' + str(item) + ' + ' + str(data.get(item)) + ' where powerdate::date = %s', [date])
+            powdate = date.today()
+            for item in data:
+                print(item)
+                if item is not None:
+                    cursor.execute('update power set ' + item[0] + ' =  %s '  + 'where powerdate = %s' ,(item[1],powdate))
                     connection.commit()
+        return({'message':'successfully updated'},200)
 
 
 class PowerPrediction(Resource):

@@ -88,13 +88,12 @@ const store = new Vuex.Store<RootState>({
       Stove: { on: false, amt: 0 },
       Oven: { on: false, amt: 0 },
       BedTv: { on: false, amt: 0 },
-      LiveTv: { on: false, amt: 0 },
+      LivingTv: { on: false, amt: 0 },
       DishWasher: { on: false, amt: 0 },
       ClothesWasher: { on: false, amt: 0 },
       Dryer: { on: false, amt: 0 },
       HVAC: { on: false, amt: 0 },
-      BathExhaust: { on: false, amt: 0 },
-      Refrigerator:{on:false, amt:0}
+      Exhaust: { on: false, amt: 0 },
     },
 
     water: {

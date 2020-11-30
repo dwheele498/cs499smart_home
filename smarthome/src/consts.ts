@@ -19,17 +19,16 @@ export const ROOMS = [
   "Bathroom",
 ];
 export const POWER_DEVICES = [
-  "LiveTv",
+  "LivingTv",
   "BedTv",
   "HVAC",
-  "Refrigerator",
   "Microwave",
   "Stove",
   "Oven",
   "DishWasher",
   "ClothesWasher",
   "Dryer",
-  "BathExhaust",
+  "Exhaust",
 ];
 export const WATER_DEVICES = ["Bath", "Shower", "DishWasher", "ClothesWasher"];
 export enum MONTHS {

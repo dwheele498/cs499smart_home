@@ -15,10 +15,9 @@ class PowerApi {
 
   getScreens = () => Api.get<PredictionModel>("/screenstats");
 
-  sendPower = async (name: string, amt: number) =>
-    Api.post("/powerupdate", {
-      name,
-      amt
+  sendPower = async (power: [string,number]) =>
+    Api.post("/monthlypowerdata", {
+      power
     });
 }
 export const powerApi = new PowerApi();

@@ -1,6 +1,7 @@
 <template>
   <v-main>
     <v-container fluid>
+      <v-btn @click="save()">Save</v-btn>
       <v-expansion-panels accordion>
         <v-expansion-panel>
           <v-expansion-panel-header>
@@ -175,6 +176,7 @@
 import Vue from "vue";
 import { ROOMS, POWER_DEVICES, WATER_DEVICES } from "../consts";
 import { Timer } from "easytimer.js";
+import {UpdateDbModel} from '../services/models/UpdateDbModel';
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import { powerApi } from "@/services/PowerApi";
 import store from "@/store";
@@ -283,6 +285,25 @@ export default Vue.extend({
       console.log(name);
       this.onOffLight(name);
     },
+    async save(){
+      const powerHold = []
+      const waterHold = []
+      Object.entries(this.$store.state.power).forEach((k)=>{
+        powerHold.push([k[0].toLowerCase(),k[1].amt]);
+        // console.log(v);
+      })
+      Object.entries(this.$store.state.water).forEach((k)=>{
+        waterHold.push([k[0].toLowerCase(),k[1].amt]);
+      })
+
+
+      await powerApi.sendPower(powerHold).then(()=>{
+        waterApi.sendWater(waterHold).then(()=>{
+          this.submit=true;
+          this.snackMessage="Successfully Saved Data";
+          })
+      })
+    }
   },
 });
 </script>

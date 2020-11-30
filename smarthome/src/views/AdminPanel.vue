@@ -38,7 +38,6 @@
                   @change="openCloseDoor(door)"
                   color="red"
                   :label="door"
-                  
                 ></v-switch>
               </v-col>
             </v-row>
@@ -105,7 +104,7 @@
                 :key="pow + ' ' + 'power'"
               >
                 <v-switch
-                  @change="firePowerEvent($event,pow)"
+                  @change="firePowerEvent($event, pow)"
                   color="amber darken-4"
                   :label="pow"
                   :input-value="$store.state.power[pow].on"
@@ -206,12 +205,19 @@ export default Vue.extend({
     },
     async save(){
       const powerHold = []
+      const waterHold = []
       Object.entries(this.$store.state.power).forEach((k)=>{
         powerHold.push([k[0].toLowerCase(),k[1].amt]);
         // console.log(v);
       })
+      Object.entries(this.$store.state.water).forEach((k)=>{
+        waterHold.push([k[0].toLowerCase(),k[1].amt]);
+      })
 
-      await powerApi.sendPower(powerHold).then((res: any)=>{console.log(res)});
+
+      await powerApi.sendPower(powerHold).then(()=>{
+        waterApi.sendWater(waterHold)
+      });
     }
   },
 });

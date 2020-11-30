@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from marshmallow import Schema, fields, INCLUDE
 from flask import request
-from datetime import datetime
+from datetime import datetime,date
 import psycopg2
 from dbGen.dbinitWeather import CreateConnection
 from dbGen.dbinitWater import Prediction
@@ -50,14 +50,18 @@ class WaterGetMonthly(Resource):
             return {'start': holderStart, 'end':holderEnd}, 200
 
     def post(self):
-        data = waterGet.load(request.args, unknown=INCLUDE)
+        # data = waterGet.load(request.args, unknown=INCLUDE)
+        data = request.json
+        data = data['water']
+        print(data)
         connection = CreateConnection()
         with connection.cursor() as cursor:
-            date = data.get('waterdate')
-            for item in ['dishwasher', 'clotheswasher', 'shower', 'bath']:
-                if data.get(item) is not None:
-                    cursor.execute('update water_usage set ' + str(item) + ' = ' + str(item) + ' + ' + str(data.get(item)) + ' where waterdate::date = %s', [date])
+            wadate = date.today()
+            for item in data:
+                if item is not None:
+                    cursor.execute('update water_usage set ' + item[0] + ' = ' + item[0] + ' + %s  where waterdate = %s', (item[1],wadate))
                     connection.commit()
+        return({'message':'ok'},200)
 
 
 class WaterPrediction(Resource):

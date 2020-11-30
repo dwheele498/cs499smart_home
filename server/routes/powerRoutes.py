@@ -51,14 +51,17 @@ class PowerGetMonthly(Resource):
             return {'start': holderStart}, 200
 
     def post(self):
-        data = powerget.load(request.args, unknown=INCLUDE)
+        # data = powerget.load(request.args, unknown=INCLUDE)
+        data = request.json
+        data = data['power']
+        print(data)
         connection = CreateConnection()
         with connection.cursor() as cursor:
             powdate = date.today()
             for item in data:
                 print(item)
                 if item is not None:
-                    cursor.execute('update power set ' + item[0] + ' =  %s '  + 'where powerdate = %s' ,(item[1],powdate))
+                    cursor.execute('update power set ' + item[0] + ' =  ' + item[0] + '+ %s '  + 'where powerdate = %s' ,(item[1],powdate))
                     connection.commit()
         return({'message':'successfully updated'},200)
 

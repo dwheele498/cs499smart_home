@@ -13,10 +13,9 @@ class WaterApi {
 
   getPrediction = () => Api.get<[PredictionModel]>("/monthlywaterprediction");
 
-  sendWater = async (name: string, amt: number) =>
-    Api.post("/waterupdate", {
-      name,
-      amt,
+  sendWater = async (water: [string,number]) =>
+    Api.post("/monthlywaterdata", {
+      water
     });
 }
 export const waterApi = new WaterApi();

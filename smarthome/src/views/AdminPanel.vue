@@ -216,8 +216,11 @@ export default Vue.extend({
 
 
       await powerApi.sendPower(powerHold).then(()=>{
-        waterApi.sendWater(waterHold)
-      });
+        waterApi.sendWater(waterHold).then(()=>{
+          this.submit=true;
+          this.snackMessage="Successfully Saved Data";
+          })
+      })
     }
   },
 });

@@ -57,7 +57,7 @@ class PowerGetMonthly(Resource):
             return {'start': holderStart}, 200
 
     def post(self):
-        data = powerget.load(request.args)
+        data = powerget.load(request.args, unknown=INCLUDE)
         connection = CreateConnection()
         with connection.cursor() as cursor:
             date = data.get('powerdate')

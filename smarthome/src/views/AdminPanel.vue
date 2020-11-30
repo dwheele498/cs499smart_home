@@ -158,7 +158,7 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-container>
-    <v-snackbar v-model="submit">Successfully Submitted Manual Operation <template v-slot:action="{ attrs }">
+    <v-snackbar v-model="submit">{{snakMessage}} <template v-slot:action="{ attrs }">
         <v-btn
           color="green"
           text
@@ -190,6 +190,7 @@ export default Vue.extend({
     radio: 0,
     appliance: "",
     submit: false,
+    snackMessage:'',
   }),
   created() {
     this.rooms = ROOMS;
@@ -226,6 +227,7 @@ export default Vue.extend({
         }
       })
       this.submit = true;
+      this.snackMessage="Operation Successfully Submitted";
       this.appliance = '';
     },
     getTime(): number {

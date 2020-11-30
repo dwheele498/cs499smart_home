@@ -5,6 +5,50 @@
       <v-expansion-panels accordion>
         <v-expansion-panel>
           <v-expansion-panel-header>
+            <v-banner>Manual Controls</v-banner>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-row class="justify-center">
+              <v-col>
+                <v-radio-group label="Minutes">
+                  <v-radio
+                    @change="radioPick(5)"
+                    color="success"
+                    label="5"
+                    value="120"
+                  >
+                  </v-radio>
+                  <v-radio
+                    @change="radioPick(10)"
+                    color="success"
+                    label="10"
+                    value="240"
+                  >
+                  </v-radio>
+                  <v-radio
+                    @change="radioPick(15)"
+                    color="success"
+                    label="15"
+                    value="360"
+                  >
+                  </v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-col>
+                <v-select :items="power" v-model="appliance" clearable label="Electrical Appliance Name"></v-select>
+              </v-col>
+              <v-col>
+                <v-select :items="water" v-model="appliance" clearable label="Water Appliance Name"></v-select>
+              </v-col>
+            </v-row>
+             <v-btn right @click="manualSubmit($event)" id=water color="success" rounded>Submit</v-btn>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+      <v-expansion-panels accordion>
+        <v-expansion-panel>
+          <v-expansion-panel-header>
             <v-banner
               ><v-icon class="material-icons">house</v-icon>Rooms</v-banner
             >
@@ -115,6 +159,16 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </v-container>
+    <v-snackbar v-model="submit">{{snakMessage}} <template v-slot:action="{ attrs }">
+        <v-btn
+          color="green"
+          text
+          v-bind="attrs"
+          @click="submit = false"
+        >
+          Close
+        </v-btn>
+      </template></v-snackbar>
   </v-main>
 </template>
 
@@ -124,10 +178,9 @@ import { ROOMS, POWER_DEVICES, WATER_DEVICES } from "../consts";
 import { Timer } from "easytimer.js";
 import {UpdateDbModel} from '../services/models/UpdateDbModel';
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { powerApi } from '@/services/PowerApi';
-
-import store from '@/store';
-import { waterApi } from '@/services/WaterApi';
+import { powerApi } from "@/services/PowerApi";
+import store from "@/store";
+import { waterApi } from "@/services/WaterApi";
 export default Vue.extend({
   data: () => ({
     rooms: [] as string[],
@@ -136,20 +189,49 @@ export default Vue.extend({
     timer: new Timer(),
     doors: [] as string[],
     lights: [] as string[],
+    radio: 0,
+    appliance: "",
+    submit: false,
+    snackMessage:'',
   }),
   created() {
     this.rooms = ROOMS;
     this.power = POWER_DEVICES;
+    console.log(this.power);
     this.water = WATER_DEVICES;
     for (const [k, v] of Object.entries(this.$store.state.doors)) {
       this.doors.push(k);
     }
-    for (const [k,v] of Object.entries(this.$store.state.lights)) {
+    for (const [k, v] of Object.entries(this.$store.state.lights)) {
       this.lights.push(k);
     }
   },
   methods: {
-    ...mapMutations(["addPower", "addWater","powerSwitch","waterSwitch","openCloseDoor","onOffLight"]),
+    ...mapMutations([
+      "addPower",
+      "addWater",
+      "powerSwitch",
+      "waterSwitch",
+      "openCloseDoor",
+      "onOffLight",
+    ]),
+    radioPick(event: any) {
+      console.log(event);
+      this.radio = Number.parseInt(event) * 60;
+    },
+    manualSubmit(){
+      this.power.forEach((p)=>{if(p === this.appliance){
+        this.addPower([this.appliance,this.radio]);
+      }})
+      this.water.forEach((w)=>{
+        if(w===this.appliance){
+          this.addWater([this.appliance,this.radio]);
+        }
+      })
+      this.submit = true;
+      this.snackMessage="Operation Successfully Submitted";
+      this.appliance = '';
+    },
     getTime(): number {
       console.log("Sending time");
       const sp = this.timer
@@ -170,15 +252,15 @@ export default Vue.extend({
         this.addPower([name, this.getTime()]);
         const pow = this.$store.state.power[name].amt;
         name = name.toLowerCase();
-        switch(name){
-          case "livingtv":
-            powerApi.sendPower('livingtv',pow);
+        switch (name) {
+          case "livetv":
+            powerApi.sendPower("livingtv", pow);
             break;
-          case "exhaust":
-            powerApi.sendPower('exhaust',pow);
+          case "bathexhaust":
+            powerApi.sendPower("exhaust", pow);
             break;
           default:
-            powerApi.sendPower(name,pow);
+            powerApi.sendPower(name, pow);
             break;
         }
         this.timer.stop();
@@ -195,11 +277,11 @@ export default Vue.extend({
         this.addWater([name, this.getTime()]);
         const wat = this.$store.state.water[name].amt;
         name = name.toLowerCase();
-        waterApi.sendWater(name,wat);
+        waterApi.sendWater(name, wat);
         this.timer.stop();
       }
     },
-    lightSwitch(name: string){
+    lightSwitch(name: string) {
       console.log(name);
       this.onOffLight(name);
     },

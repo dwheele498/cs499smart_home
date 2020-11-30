@@ -1,27 +1,26 @@
 <template>
-  <v-container>
-    <v-flex min-width="600px">
-      <img
-        src="../../assets/homeicons/FloorPlan.svg"
+    <v-container fill-height align-center>
+      <v-flex min-width="600px">
+        <img src="../../assets/homeicons/FloorPlanDoor.svg"
         width="600px"
         max-width="100%"
         @click="doorSwitch($event)"
-      />
-    </v-flex>
-    <v-row>
-      <v-col v-for="k of Object.keys(doors)" :key="k" cols="12" md="2">
-        <v-banner class="flex-grow-1 text-left" height="60">{{ k }}</v-banner>
-        <v-item>
-          <v-card
-            :color="doors[k] ? 'grey' : 'black'"
-            class="d-flex align-center"
-            width="200"
-            @click="openCloseDoor(k)"
-          >
-            <div
-              v-if="doors[k]"
-              class="display-3 flex-grow-1 text-center black--text"
+        />
+
+      </v-flex>
+      <v-row>
+        <v-col v-for=" k of Object.keys(doors)" :key="k" cols="12" md="2">
+          <v-banner class="flex-grow-1 text-left"
+          height="60"
+          >{{ k }}</v-banner>
+          <v-item>
+            <v-card
+              :color="doors[k] ? 'grey' : 'black'"
+              class="d-flex align-center"
+              width="200"
+              @click="openCloseDoor(k)"
             >
+            <div v-if="doors[k]">
               <img src="../../assets/homeicons/DoorOpen.svg" />
             </div>
             <div v-else class="display-3 flex-grow-1 text-center white--text">

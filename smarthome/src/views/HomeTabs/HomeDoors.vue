@@ -15,39 +15,31 @@
           >{{ k }}</v-banner>
           <v-item>
             <v-card
-              :color="doors[k].on ? 'white' : 'black'"
+              :color="doors[k] ? 'grey' : 'black'"
               class="d-flex align-center"
-              height="200"
-              @click="openCloseDoor([k,15])"
+              width="200"
+              @click="openCloseDoor(k)"
             >
-                <div
-                  v-if="doors[k].on"
-                  class="display-3 flex-grow-1 text-center black--text"
-                >
-                  On
-                </div>
-                <div
-                  v-else
-                  class="display-3 flex-grow-1 text-center white--text"
-                >
-                  Off
-                </div>
-            </v-card>
-          </v-item>
-        </v-col>
-</v-row>
-
+            <div v-if="doors[k]">
+              <img src="../../assets/homeicons/DoorOpen.svg" />
+            </div>
+            <div v-else class="display-3 flex-grow-1 text-center white--text">
+              <img src="../../assets/homeicons/DoorClosed.svg" />
+            </div>
+          </v-card>
+        </v-item>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { mapMutations, mapState } from 'vuex';
-import {ROOMS} from '../../consts';
-import {Timer} from "easytimer.js";
+import Vue from "vue";
+import { mapMutations, mapState } from "vuex";
+import { ROOMS } from "../../consts";
 export default Vue.extend({
-      data: () => ({
-        rooms: ROOMS,
-        timer: new Timer(),
+  data: () => ({
+    rooms: ROOMS,
   }),
   computed: {
     ...mapState(["doors"]),

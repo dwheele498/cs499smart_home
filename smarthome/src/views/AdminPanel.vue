@@ -79,7 +79,7 @@
             <v-row>
               <v-col v-for="door in doors" :key="door + ' ' + 'power'">
                 <v-switch
-                  @change="fireDoorEvent($event)"
+                  @change="openCloseDoor(door)"
                   color="red"
                   :label="door"
                 ></v-switch>
@@ -278,16 +278,6 @@ export default Vue.extend({
         const wat = this.$store.state.water[name].amt;
         name = name.toLowerCase();
         waterApi.sendWater(name, wat);
-        this.timer.stop();
-      }
-    },
-    fireDoorEvent(event: any){
-      console.log(name);
-      if (event === true) {
-        this.timer.start();
-      } else {
-        this.timer.pause();
-        this.addPower(['Hvac', this.getTime()]);
         this.timer.stop();
       }
     },

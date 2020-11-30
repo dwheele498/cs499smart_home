@@ -49,6 +49,17 @@ class WaterGetMonthly(Resource):
             print(holderStart)
             return {'start': holderStart, 'end':holderEnd}, 200
 
+    def post(self):
+        data = waterGet.load(request.args, unknown=INCLUDE)
+        connection = CreateConnection()
+        with connection.cursor() as cursor:
+            date = data.get('waterdate')
+            for item in ['dishwasher', 'clotheswasher', 'shower', 'bath']:
+                if data.get(item) is not None:
+                    cursor.execute('update water_usage set ' + str(item) + ' = ' + str(item) + ' + ' + str(data.get(item)) + ' where waterdate::date = %s', [date])
+                    connection.commit()
+
+
 class WaterPrediction(Resource):
     def get(self):
         data = Prediction()

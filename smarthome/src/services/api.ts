@@ -13,7 +13,7 @@ export const Api: AxiosInstance = axios.create({
 export const WeatherAPI: AxiosInstance = axios.create({
   baseURL: "https://api.meteostat.net/v2/",
   headers: {
-    "x-api-key": API_KEY,
+    "x-api-key": "1mXl3ltqbTwYp4w7T9F3VylcJGwfzJRh",
     'Content-Type':'application/json'
   },
 

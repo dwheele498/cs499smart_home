@@ -1,16 +1,11 @@
 <template>
-   <v-card
-    raised
-    class="mx-auto"
-    max-width="200"
-    height="6rem"
-  >
+  <v-card raised class="mx-auto" max-width="200" height="6rem">
     <h2 class="cyan--text text-center">{{ date.toFormat("D") }}</h2>
     <h2 v-if="callCompleted" class="mx-auto px-auto lime--text text-center">
-      Avg: {{ temp }}&#8457;
+      Current: {{ temp }}&#8457;
     </h2>
     <h2 v-else class="mx-auto px-auto lime--text text-center">
-      Avg: -1&#8457;
+      Current: -1&#8457;
     </h2>
     <h2 class="mx-auto px-auto lime--text text-center">
       HVAC:
@@ -32,30 +27,35 @@ export default Vue.extend({
   data: () => ({
     date: DateTime.local(),
     temp: 0,
+    show: true,
     callCompleted: false,
-    ...mapState(['thermo']),
-        hvac: {
+    ...mapState(["thermo"]),
+    hvac: {
       temp: 0,
       on: false,
     },
   }),
-    created() {
+  created() {
     this.initialize();
-    this.hvac.temp = this.$store.state.thermo
+    this.hvac.temp = this.$store.state.thermo;
     this.hvac.on = this.$store.state.power.HVAC.on;
   },
-  computed:{
-    getThermo(){
+  computed: {
+    getThermo() {
       return this.$store.state.thermo;
-    }
+    },
   },
-  watch:{
-    getThermo(newTemp,oldTemp){
-      console.log(newTemp)
-    }
+  watch: {
+    getThermo(newTemp, oldTemp) {
+      console.log(newTemp);
+    },
   },
   methods: {
-    ...mapMutations(["addPower","setThermo"]),
+    showSwitch() {
+      this.show = !this.show;
+      return this.show;
+    },
+    ...mapMutations(["addPower", "setThermo"]),
     async initialize(): Promise<void> {
       await weatherApi
         .getDay(
@@ -66,10 +66,10 @@ export default Vue.extend({
           this.temp = Number.parseInt(
             (res.data.data[0].temp * 1.8 + 32).toFixed(0)
           );
-          this.callCompleted = true
+          this.callCompleted = true;
         });
     },
-        async incrementHvac(): Promise<void> {
+    async incrementHvac(): Promise<void> {
       this.addPower(["Hvac", 1]);
       this.setThermo(1);
     },
@@ -77,7 +77,6 @@ export default Vue.extend({
       this.addPower(["Hvac", 1]);
       this.setThermo(-1);
     },
-
   },
 });
 </script>

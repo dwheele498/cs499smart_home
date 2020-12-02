@@ -121,7 +121,7 @@ def GeneratePowerDBData():
                 # print(day, 'clotheswash', clotheswasher)
                 light = ((60 * random.randint(1, 10) / 1000) * .12)
                 hvac = ((3500 * random.randint(1, 24)) / 1000) * 0.12
-                total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer
+                total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer + hvac
                 # print(day,'total' ,total)
             elif day == 'Saturday' or 'Sunday':
                 liveTv = tvformula_we * rand()
@@ -156,7 +156,7 @@ def GeneratePowerDBData():
                     dryer = 0
                 light = ((60 * random.randint(1, 17) / 1000) * .12)
                 hvac = ((3500 * random.randint(1, 24)) / 1000) * 0.12
-                total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer
+                total = liveTv + bedTv + oven + microwave + dishwasher + stove + clotheswasher + light + dryer + hvac
                 #print(day, 'total weekend', total)
             date = date.strftime("%Y-%m-%d")
             update_usage = powerschema.load({"powerdate": date, "livingtv": liveTv,

@@ -13,7 +13,6 @@ export interface RootState {
   windows: Record<string, boolean>;
   thermo: number;
   outSideTemp: number;
-
 }
 
 const mutations: MutationTree<RootState> = {
@@ -52,12 +51,22 @@ const mutations: MutationTree<RootState> = {
       }
     }
   },
-  openCloseDoor(state, payload: [string, number]) {
-  for (const [k, v] of Object.entries(state.doors)) {
-      if (k === payload[0]) {
-        console.log(k + " " + v);
-        state.doors[k].on = !state.doors[k].on;
-       state.doors[k].amt += payload[1];
+  doorsSwitch(state, payload: string){
+    for (const [k, v] of Object.entries(state.doors)) {
+      if (k == payload) {
+        state.doors[k].on
+          ? (state.doors[k].on = false)
+          : (state.doors[k].on = true);
+      }
+    }
+  },
+  openCloseDoor(state, payload: [string,number]) {
+    for (const [k, v] of Object.entries(state.doors)) {
+      if (k == payload[0]) {
+        state.doors[k].on
+          ? (state.doors[k].on = false)
+          : (state.doors[k].on = true);
+        state.doors[k].amt += payload[1];
 
         console.log(k + " " + state.doors[k]);
       }
@@ -89,7 +98,6 @@ const mutations: MutationTree<RootState> = {
   setThermo(state, payload: number) {
     state.thermo += payload;
   },
-
 };
 
 const store = new Vuex.Store<RootState>({
@@ -125,7 +133,6 @@ const store = new Vuex.Store<RootState>({
       "House to Garage Door": { on: false, amt: 0 },
       "Bathroom Door 1": { on: false, amt: 0 },
       "Bathroom Door 2": { on: false, amt: 0 },
-
     },
     lights: {
       "Master Bedroom Overhead": false,
@@ -159,7 +166,6 @@ const store = new Vuex.Store<RootState>({
     },
     thermo: 68,
     outSideTemp: 0,
-
   },
   mutations: mutations,
 });

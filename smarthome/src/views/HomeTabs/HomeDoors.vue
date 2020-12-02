@@ -15,12 +15,12 @@
           >{{ k }}</v-banner>
           <v-item>
             <v-card
-              :color="doors[k] ? 'grey' : 'black'"
+              :color="doors[k].on ? 'grey' : 'black'"
               class="d-flex align-center"
               width="200"
-              @click="openCloseDoor(k)"
+              @click="doorsSwitch(k)"
             >
-            <div v-if="doors[k]">
+            <div v-if="doors[k].on == true" class="display-3 flex-grow-1 text-center white--text">
               <img src="../../assets/homeicons/DoorOpen.svg" />
             </div>
             <div v-else class="display-3 flex-grow-1 text-center white--text">
@@ -45,7 +45,7 @@ export default Vue.extend({
     ...mapState(["doors"]),
   },
   methods: {
-    ...mapMutations(["openCloseDoor"]),
+    ...mapMutations(["doorsSwitch"]),
     doorSwitch(event: MouseEvent) {
       console.log("x:" + " " + event.layerX);
       console.log("y:" + " " + event.layerY);
@@ -55,69 +55,69 @@ export default Vue.extend({
         event.layerY <= 157 &&
         event.layerY > 118
       ) {
-        this.openCloseDoor("Master Bedroom Door");
+        this.doorsSwitch("Master Bedroom Door");
       } else if (
         event.layerX >= 374 &&
         event.layerX < 420 &&
         event.layerY >= 135 &&
         event.layerY < 158
       ) {
-        this.openCloseDoor("Bathroom Door 2");
+        this.doorsSwitch("Bathroom Door 2");
       } else if (
         event.layerX >= 427 &&
         event.layerX < 450 &&
         event.layerY >= 36 && event.layerY < 72
       ) {
-        this.openCloseDoor("Bathroom Door 1");
+        this.doorsSwitch("Bathroom Door 1");
       } else if (
         event.layerX >= 420 &&
         event.layerX < 476 &&
         event.layerY <= 217 &&
         event.layerY > 190
       ) {
-        this.openCloseDoor("Kid's Bedroom 1 Door");
+        this.doorsSwitch("Kid's Bedroom 1 Door");
       } else if (
         event.layerX >= 515 &&
         event.layerX < 590 &&
         event.layerY <= 300 &&
         event.layerY > 199
       ) {
-        this.openCloseDoor("Kid's Bedroom 2 Door");
+        this.doorsSwitch("Kid's Bedroom 2 Door");
       } else if (
         event.layerX >= 234 &&
         event.layerX < 362 &&
         event.layerY <= 307 &&
         event.layerY > 169
       ) {
-        this.openCloseDoor("Front Door");
+        this.doorsSwitch("Front Door");
       } else if (
         event.layerX >= 204 &&
         event.layerX < 362 &&
         event.layerY <= 80 &&
         event.layerY > 12
       ) {
-        this.openCloseDoor("Back Door");
+        this.doorsSwitch("Back Door");
       } else if (
         event.layerX >= 10 &&
         event.layerX < 97 &&
         event.layerY <= 304 &&
         event.layerY > 215
       ) {
-        this.openCloseDoor("Garage Door 1");
+        this.doorsSwitch("Garage Door 1");
       } else if (
         event.layerX >= 98 &&
         event.layerX < 215 &&
         event.layerY <= 304 &&
         event.layerY > 215
       ) {
-        this.openCloseDoor("Garage Door 2");
+        this.doorsSwitch("Garage Door 2");
       } else if (
         event.layerX >= 151 &&
         event.layerX < 257 &&
         event.layerY <= 160 &&
         event.layerY > 81
       ) {
-        this.openCloseDoor("House to Garage Door");
+        this.doorsSwitch("House to Garage Door");
       }
     },
   },

@@ -214,6 +214,7 @@ export default Vue.extend({
       "waterSwitch",
       "openCloseDoor",
       "onOffLight",
+      "doorsSwitch"
     ]),
     radioPick(event: any) {
       console.log(event);
@@ -284,9 +285,11 @@ export default Vue.extend({
     fireDoorEvent(event: any, name: string) {
       console.log(name);
       if (event === true) {
+        this.doorsSwitch(name)
         this.timer.start();
       } else {
         this.timer.pause();
+        this.doorsSwitch(name);
         this.openCloseDoor([name, this.getTime()]);
         this.timer.stop();
       }
